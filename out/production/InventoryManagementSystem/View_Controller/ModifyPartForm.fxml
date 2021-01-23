@@ -8,16 +8,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TitledPane fx:id="modifyPartForm" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" text="Modify Part" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.ModifyPartForm">
+
+<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" text="Modify Part" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.ModifyPartForm">
    <content>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="440.0" prefWidth="598.0">
          <children>
-            <RadioButton fx:id="inHouseSelection" layoutX="48.0" layoutY="32.0" mnemonicParsing="false" onAction="#inHouseSelected" text="In-House">
+            <RadioButton layoutX="48.0" layoutY="32.0" mnemonicParsing="false" text="In-House">
                <font>
                   <Font size="14.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="outSourcedSelection" layoutX="175.0" layoutY="32.0" mnemonicParsing="false" onAction="#outSourcedSelected" text="Outsourced">
+            <RadioButton layoutX="175.0" layoutY="32.0" mnemonicParsing="false" text="Outsourced">
                <font>
                   <Font size="14.0" />
                </font>
@@ -47,29 +48,29 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="mIDcompanyNameLabel" layoutX="48.0" layoutY="319.0" text="Machine ID">
+            <Label layoutX="48.0" layoutY="319.0" text="Machine ID">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="partIDTextField" layoutX="150.0" layoutY="102.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField fx:id="partNameTextField" layoutX="150.0" layoutY="141.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField fx:id="partStockTextField" layoutX="150.0" layoutY="183.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField fx:id="partPriceTextField" layoutX="150.0" layoutY="227.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField fx:id="partMaxTextField" layoutX="150.0" layoutY="270.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField fx:id="mIDcompanyNameTextField" layoutX="150.0" layoutY="315.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField layoutX="150.0" layoutY="102.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField layoutX="150.0" layoutY="141.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField layoutX="150.0" layoutY="183.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField layoutX="150.0" layoutY="227.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField layoutX="150.0" layoutY="270.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField layoutX="150.0" layoutY="315.0" prefHeight="29.0" prefWidth="114.0" />
             <Label layoutX="334.0" layoutY="276.0" text="Min">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="partMinTextField" layoutX="370.0" layoutY="270.0" prefHeight="29.0" prefWidth="114.0" />
-            <Button fx:id="saveButton" layoutX="350.0" layoutY="397.0" mnemonicParsing="false" onAction="#saveButtonPressed" text="Save">
+            <TextField layoutX="370.0" layoutY="270.0" prefHeight="29.0" prefWidth="114.0" />
+            <Button layoutX="350.0" layoutY="397.0" mnemonicParsing="false" text="Save">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button fx:id="cancelButton" layoutX="454.0" layoutY="398.0" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel">
+            <Button layoutX="454.0" layoutY="398.0" mnemonicParsing="false" text="Cancel">
                <font>
                   <Font size="14.0" />
                </font>

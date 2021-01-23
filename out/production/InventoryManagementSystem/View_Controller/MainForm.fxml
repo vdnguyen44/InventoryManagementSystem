@@ -11,7 +11,7 @@
 
 <!--markup to edit appearance of user interface-->
 
-<TitledPane alignment="TOP_LEFT" animated="false" prefHeight="555.0" prefWidth="1270.0" text="Inventory Management System" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.MainScreenController">
+<TitledPane alignment="TOP_LEFT" animated="false" prefHeight="555.0" prefWidth="1270.0" text="Inventory Management System" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.MainFormController">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="515.0" prefWidth="1268.0">
          <children>

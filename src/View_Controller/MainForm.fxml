@@ -11,7 +11,7 @@
 
 <!--markup to edit appearance of user interface-->
 
-<TitledPane alignment="TOP_LEFT" animated="false" prefHeight="555.0" prefWidth="1270.0" text="Inventory Management System" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.MainFormController">
+<TitledPane fx:id="mainForm" alignment="TOP_LEFT" animated="false" prefHeight="555.0" prefWidth="1270.0" text="Inventory Management System" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.MainFormController">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="515.0" prefWidth="1268.0">
          <children>
@@ -30,11 +30,11 @@
                         <TableColumn minWidth="0.0" prefWidth="201.0" style="-fx-font-size: 16;" text="Price/Cost per Unit" />
                     </columns>
                   </TableView>
-                  <Button fx:id="addPartButton" layoutX="46.0" layoutY="286.0" mnemonicParsing="false" text="Add" />
-                  <Button fx:id="modifyPartButton" layoutX="356.0" layoutY="286.0" mnemonicParsing="false" text="Modify" />
-                  <Button fx:id="deletePartButton" layoutX="465.0" layoutY="286.0" mnemonicParsing="false" text="Delete" />
+                  <Button fx:id="addPartButton" layoutX="46.0" layoutY="286.0" mnemonicParsing="false" onAction="#addPartButtonPressed" text="Add" />
+                  <Button fx:id="modifyPartButton" layoutX="356.0" layoutY="286.0" mnemonicParsing="false" onAction="#modifyPartButtonPressed" text="Modify" />
+                  <Button fx:id="deletePartButton" layoutX="465.0" layoutY="286.0" mnemonicParsing="false" onAction="#deletePartButtonPressed" text="Delete" />
                   <TextField fx:id="searchPartTextField" layoutX="309.0" layoutY="29.0" />
-                  <Button fx:id="searchPartButton" layoutX="494.0" layoutY="29.0" mnemonicParsing="false" text="Search" />
+                  <Button fx:id="searchPartButton" layoutX="494.0" layoutY="29.0" mnemonicParsing="false" onAction="#searchPartButtonPressed" text="Search" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="647.0" layoutY="110.0" prefHeight="339.0" prefWidth="584.0" style="-fx-border-color: black;">
@@ -52,14 +52,14 @@
                         <TableColumn prefWidth="180.0" style="-fx-font-size: 16;" text="Price/Cost per Unit" />
                     </columns>
                   </TableView>
-                  <Button fx:id="addProductButton" layoutX="46.0" layoutY="286.0" mnemonicParsing="false" text="Add" />
-                  <Button fx:id="modifyProductButton" layoutX="356.0" layoutY="286.0" mnemonicParsing="false" text="Modify" />
-                  <Button fx:id="deleteProductButton" layoutX="465.0" layoutY="286.0" mnemonicParsing="false" text="Delete" />
+                  <Button fx:id="addProductButton" layoutX="46.0" layoutY="286.0" mnemonicParsing="false" onAction="#addProductButtonPressed" text="Add" />
+                  <Button fx:id="modifyProductButton" layoutX="356.0" layoutY="286.0" mnemonicParsing="false" onAction="#modifyProductButtonPressed" text="Modify" />
+                  <Button fx:id="deleteProductButton" layoutX="465.0" layoutY="286.0" mnemonicParsing="false" onAction="#deleteProductButtonPressed" text="Delete" />
                   <TextField fx:id="searchProductTextField" layoutX="309.0" layoutY="29.0" />
-                  <Button fx:id="searchProductButton" layoutX="494.0" layoutY="29.0" mnemonicParsing="false" text="Search" />
+                  <Button fx:id="searchProductButton" layoutX="494.0" layoutY="29.0" mnemonicParsing="false" onAction="#searchProductButtonPressed" text="Search" />
                </children>
             </AnchorPane>
-            <Button fx:id="exitButton" layoutX="1178.0" layoutY="466.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="53.0" text="Exit" />
+            <Button fx:id="exitButton" layoutX="1178.0" layoutY="466.0" mnemonicParsing="false" onAction="#exitButtonPressed" prefHeight="35.0" prefWidth="53.0" text="Exit" />
          </children>
       </AnchorPane>
   </content>

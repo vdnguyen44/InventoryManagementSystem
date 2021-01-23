@@ -8,68 +8,68 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" text="Add Part" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+<TitledPane fx:id="addPartForm" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" text="Add Part" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="440.0" prefWidth="598.0">
          <children>
-            <RadioButton layoutX="48.0" layoutY="32.0" mnemonicParsing="false" text="In-House">
+            <RadioButton fx:id="inHouseSelection" layoutX="48.0" layoutY="32.0" mnemonicParsing="false" onAction="#inHouseSelected" text="In-House">
                <font>
                   <Font size="14.0" />
                </font>
             </RadioButton>
-            <RadioButton layoutX="175.0" layoutY="32.0" mnemonicParsing="false" text="Outsourced">
+            <RadioButton fx:id="outSourcedSelection" layoutX="175.0" layoutY="32.0" mnemonicParsing="false" onAction="#outSourcedSelected" text="Outsourced">
                <font>
                   <Font size="14.0" />
                </font>
             </RadioButton>
-            <Label layoutX="48.0" layoutY="104.0" text="ID">
+            <Label layoutX="55.0" layoutY="104.0" text="ID">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="48.0" layoutY="145.0" text="Name">
+            <Label layoutX="44.0" layoutY="150.0" text="Name">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="48.0" layoutY="187.0" text="Inventory">
+            <Label layoutX="33.0" layoutY="195.0" text="Inventory">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="48.0" layoutY="231.0" text="Price/Cost">
+            <Label layoutX="31.0" layoutY="240.0" text="Price/Cost">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="48.0" layoutY="274.0" text="Max">
+            <Label layoutX="49.0" layoutY="285.0" text="Max">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="48.0" layoutY="319.0" text="Machine ID">
+            <Label fx:id="mIDcompanyNameLabel" layoutX="27.0" layoutY="330.0" text="Machine ID">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="150.0" layoutY="102.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField layoutX="150.0" layoutY="141.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField layoutX="150.0" layoutY="183.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField layoutX="150.0" layoutY="227.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField layoutX="150.0" layoutY="270.0" prefHeight="29.0" prefWidth="114.0" />
-            <TextField layoutX="150.0" layoutY="315.0" prefHeight="29.0" prefWidth="114.0" />
-            <Label layoutX="334.0" layoutY="276.0" text="Min">
+            <TextField fx:id="partIDTextField" layoutX="150.0" layoutY="100.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField fx:id="partNameTextField" layoutX="150.0" layoutY="145.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField fx:id="partStockTextField" layoutX="150.0" layoutY="190.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField fx:id="partPriceTextField" layoutX="150.0" layoutY="235.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField fx:id="partMaxTextField" layoutX="150.0" layoutY="280.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField fx:id="mIDcompanyNameTextField" layoutX="150.0" layoutY="325.0" prefHeight="29.0" prefWidth="114.0" />
+            <Label layoutX="316.0" layoutY="285.0" text="Min">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="370.0" layoutY="270.0" prefHeight="29.0" prefWidth="114.0" />
-            <Button layoutX="350.0" layoutY="397.0" mnemonicParsing="false" text="Save">
+            <TextField fx:id="partMinTextField" layoutX="370.0" layoutY="280.0" prefHeight="29.0" prefWidth="114.0" />
+            <Button fx:id="saveButton" layoutX="350.0" layoutY="397.0" mnemonicParsing="false" onAction="#saveButtonPressed" text="Save">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button layoutX="454.0" layoutY="398.0" mnemonicParsing="false" text="Cancel">
+            <Button fx:id="cancelButton" layoutX="454.0" layoutY="398.0" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel">
                <font>
                   <Font size="14.0" />
                </font>

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TitledPane fx:id="modifyPartForm" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" text="Modify Part" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.ModifyPartForm">
+<TitledPane fx:id="modifyPartForm" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" text="Modify Part" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.ModifyPartFormController">
    <content>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="440.0" prefWidth="598.0">
          <children>
@@ -64,12 +64,12 @@
                </font>
             </Label>
             <TextField fx:id="partMinTextField" layoutX="370.0" layoutY="270.0" prefHeight="29.0" prefWidth="114.0" />
-            <Button fx:id="saveButton" layoutX="350.0" layoutY="397.0" mnemonicParsing="false" onAction="#saveButtonPressed" text="Save">
+            <Button fx:id="saveButton" layoutX="350.0" layoutY="397.0" mnemonicParsing="false" onAction="#modifyPart" text="Save">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button fx:id="cancelButton" layoutX="454.0" layoutY="398.0" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel">
+            <Button fx:id="cancelButton" layoutX="454.0" layoutY="398.0" mnemonicParsing="false" onAction="#returnToMain" text="Cancel">
                <font>
                   <Font size="14.0" />
                </font>

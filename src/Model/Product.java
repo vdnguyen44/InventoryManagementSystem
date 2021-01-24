@@ -7,7 +7,7 @@ public class Product {
     protected ObservableList<Part> associatedParts;
     protected int productID;
     protected String productName;
-    protected double productPrice = 0.0;
+    protected double productPrice;
     protected int productStock;
     protected int productMin;
     protected int productMax;

@@ -5,19 +5,23 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TitledPane fx:id="addPartForm" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" text="Add Part" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<TitledPane fx:id="addPartForm" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" text="Add Part" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AddPartFormController">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="440.0" prefWidth="598.0">
          <children>
-            <RadioButton fx:id="inHouseSelection" layoutX="48.0" layoutY="32.0" mnemonicParsing="false" onAction="#inHouseSelected" text="In-House">
+            <RadioButton fx:id="inHouseSelection" layoutX="48.0" layoutY="32.0" mnemonicParsing="false" onAction="#inHouseSelected" selected="true" text="In-House">
                <font>
                   <Font size="14.0" />
                </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="sourceToggleGroup" />
+               </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="outSourcedSelection" layoutX="175.0" layoutY="32.0" mnemonicParsing="false" onAction="#outSourcedSelected" text="Outsourced">
+            <RadioButton fx:id="outSourcedSelection" layoutX="175.0" layoutY="32.0" mnemonicParsing="false" onAction="#outSourcedSelected" text="Outsourced" toggleGroup="$sourceToggleGroup">
                <font>
                   <Font size="14.0" />
                </font>
@@ -64,12 +68,12 @@
                </font>
             </Label>
             <TextField fx:id="partMinTextField" layoutX="370.0" layoutY="280.0" prefHeight="29.0" prefWidth="114.0" />
-            <Button fx:id="saveButton" layoutX="350.0" layoutY="397.0" mnemonicParsing="false" onAction="#saveButtonPressed" text="Save">
+            <Button fx:id="saveButton" layoutX="350.0" layoutY="397.0" mnemonicParsing="false" onAction="#addPart" text="Save">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button fx:id="cancelButton" layoutX="454.0" layoutY="398.0" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel">
+            <Button fx:id="cancelButton" layoutX="454.0" layoutY="398.0" mnemonicParsing="false" onAction="#returnToMain" text="Cancel">
                <font>
                   <Font size="14.0" />
                </font>

@@ -2,11 +2,17 @@ package View_Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainFormController {
 
@@ -53,48 +59,54 @@ public class MainFormController {
     private Button exitButton;
 
     @FXML
-    void addPartButtonPressed(ActionEvent event) {
+    void deletePartFromTable(ActionEvent event) {
 
     }
 
     @FXML
-    void addProductButtonPressed(ActionEvent event) {
+    void deleteProductFromTable(ActionEvent event) {
 
     }
 
     @FXML
-    void deletePartButtonPressed(ActionEvent event) {
+    void displayAddPartForm(ActionEvent event) throws IOException {
+        Parent addPartFormLoader = FXMLLoader.load(getClass().getResource("AddPartForm.fxml"));
+        Scene addPartScene = new Scene(addPartFormLoader);
+
+        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        window.setScene(addPartScene);
+        window.show();
+    }
+
+    @FXML
+    void displayAddProductForm(ActionEvent event) {
 
     }
 
     @FXML
-    void deleteProductButtonPressed(ActionEvent event) {
+    void displayModifyPartForm(ActionEvent event) {
 
     }
 
     @FXML
-    void exitButtonPressed(ActionEvent event) {
+    void displayModifyProductForm(ActionEvent event) {
+
+    }
+
+    @FXML
+    void exitApplication(ActionEvent event) {
         Stage stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
-    }
-
-    @FXML
-    void modifyPartButtonPressed(ActionEvent event) {
 
     }
 
     @FXML
-    void modifyProductButtonPressed(ActionEvent event) {
+    void searchPartsTable(ActionEvent event) {
 
     }
 
     @FXML
-    void searchPartButtonPressed(ActionEvent event) {
-
-    }
-
-    @FXML
-    void searchProductButtonPressed(ActionEvent event) {
+    void searchProductsTable(ActionEvent event) {
 
     }
 

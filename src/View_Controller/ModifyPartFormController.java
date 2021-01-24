@@ -2,11 +2,18 @@ package View_Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ModifyPartFormController {
 
@@ -52,10 +59,14 @@ public class ModifyPartFormController {
     @FXML
     void inHouseSelected(ActionEvent event) {
 
+        mIDcompanyNameLabel.setText("Machine ID");
+
     }
 
     @FXML
     void outSourcedSelected(ActionEvent event) {
+
+        mIDcompanyNameLabel.setText("Company Name");
 
     }
 
@@ -65,7 +76,14 @@ public class ModifyPartFormController {
     }
 
     @FXML
-    void returnToMain(ActionEvent event) {
+    void returnToMain(ActionEvent event) throws IOException {
+
+        Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+        Scene mainScene = new Scene(mainLoader);
+
+        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        window.setScene(mainScene);
+        window.show();
 
     }
 

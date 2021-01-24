@@ -1,10 +1,11 @@
 package Model;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 
 public class Product {
 
-    protected ObservableList<Part> associatedParts;
+    private static ObservableList<Part> associatedParts = FXCollections.observableArrayList();;
     protected int productID;
     protected String productName;
     protected double productPrice;
@@ -69,7 +70,7 @@ public class Product {
         this.productMax = productMax;
     }
 
-    public void addAssociatedPart(Part part) {
+    public static void addAssociatedPart(Part part) {
         associatedParts.add(part);
     }
 
@@ -83,7 +84,7 @@ public class Product {
         return false;
     }
 
-    public ObservableList<Part> getAllAssociatedParts() {
+    public static ObservableList<Part> getAllAssociatedParts() {
 
         return associatedParts;
     }

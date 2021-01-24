@@ -73,16 +73,17 @@ public class AddPartFormController {
 
     @FXML
     void outSourcedSelected(ActionEvent event) {
+
         mIDcompanyNameLabel.setText("Company Name");
     }
 
     @FXML
     void returnToMain(ActionEvent event) throws IOException {
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
-        Scene addPartScene = new Scene(mainLoader);
+        Scene mainScene = new Scene(mainLoader);
 
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(addPartScene);
+        window.setScene(mainScene);
         window.show();
     }
 

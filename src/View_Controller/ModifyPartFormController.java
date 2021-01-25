@@ -45,10 +45,10 @@ public class ModifyPartFormController {
     private TextField partMaxTextField;
 
     @FXML
-    private TextField mIDcompanyNameTextField;
+    private TextField partMinTextField;
 
     @FXML
-    private TextField partMinTextField;
+    private TextField mIDcompanyNameTextField;
 
     @FXML
     private Button saveButton;

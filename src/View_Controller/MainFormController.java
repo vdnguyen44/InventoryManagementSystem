@@ -3,7 +3,6 @@ package View_Controller;
 import Model.Inventory;
 import Model.Part;
 import Model.Product;
-import javafx.beans.property.Property;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainFormController  {
+public class MainFormController implements Initializable {
 
     @FXML
     private TitledPane mainForm;
@@ -148,32 +147,32 @@ public class MainFormController  {
 
     }
 
-//    @Override
-//    public void initialize(URL url, ResourceBundle rb) {
-//        //this is the first method called anytime this controller is instantiated
-//
-//        partsTable.setItems(Inventory.getAllParts());
-//
-//        partIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
-//
-//        partNameCol.setCellValueFactory(new PropertyValueFactory<>("partName"));
-//
-//        partStockCol.setCellValueFactory(new PropertyValueFactory<>("partStock"));
-//
-//        partPriceCol.setCellValueFactory(new PropertyValueFactory<>("partPrice"));
-//
-//
-//        productsTable.setItems(Inventory.getAllProducts());
-//
-//        productIDCol.setCellValueFactory(new PropertyValueFactory<>("productID"));
-//
-//        productNameCol.setCellValueFactory(new PropertyValueFactory<>("productName"));
-//
-//        productStockCol.setCellValueFactory(new PropertyValueFactory<>("productStock"));
-//
-//        productPriceCol.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
-//
-//
-//    }
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        //this is the first method called anytime this controller is instantiated
+
+        partsTable.setItems(Inventory.getAllParts());
+
+        partIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
+
+        partNameCol.setCellValueFactory(new PropertyValueFactory<>("partName"));
+
+        partStockCol.setCellValueFactory(new PropertyValueFactory<>("partStock"));
+
+        partPriceCol.setCellValueFactory(new PropertyValueFactory<>("partPrice"));
+
+
+        productsTable.setItems(Inventory.getAllProducts());
+
+        productIDCol.setCellValueFactory(new PropertyValueFactory<>("productID"));
+
+        productNameCol.setCellValueFactory(new PropertyValueFactory<>("productName"));
+
+        productStockCol.setCellValueFactory(new PropertyValueFactory<>("productStock"));
+
+        productPriceCol.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
+
+
+    }
 
 }

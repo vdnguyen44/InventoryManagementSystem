@@ -1,5 +1,8 @@
 package View_Controller;
 
+import Model.InHouse;
+import Model.Inventory;
+import Model.Outsourced;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,10 +53,10 @@ public class AddPartFormController {
     private TextField partMaxTextField;
 
     @FXML
-    private TextField mIDcompanyNameTextField;
+    private TextField partMinTextField;
 
     @FXML
-    private TextField partMinTextField;
+    private TextField mIDcompanyNameTextField;
 
     @FXML
     private Button saveButton;
@@ -62,7 +65,33 @@ public class AddPartFormController {
     private Button cancelButton;
 
     @FXML
-    void addPart(ActionEvent event) {
+    void addPart(ActionEvent event) throws IOException {
+        int partID = Integer.parseInt(partIDTextField.getText());
+        String partName = partNameTextField.getText();
+        int partStock = Integer.parseInt(partStockTextField.getText());
+        double partPrice = Double.parseDouble(partPriceTextField.getText());
+        int partMax = Integer.parseInt(partMaxTextField.getText());
+        int partMin = Integer.parseInt(partMinTextField.getText());
+        // boolean inHouseOrOutSourced;
+        int machineID;
+        String companyName;
+
+        if (inHouseSelection.isSelected()) {
+            machineID = Integer.parseInt(mIDcompanyNameTextField.getText());
+            Inventory.addPart(new InHouse(partID, partName, partPrice, partStock, partMin, partMax, machineID));
+        }
+        else if (outSourcedSelection.isSelected()) {
+            companyName = mIDcompanyNameTextField.getText();
+            Inventory.addPart(new Outsourced(partID, partName, partPrice, partStock, partMin, partMax, companyName));
+        }
+
+        Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+        Scene mainScene = new Scene(mainLoader);
+
+        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        window.setScene(mainScene);
+        window.show();
+
 
     }
 

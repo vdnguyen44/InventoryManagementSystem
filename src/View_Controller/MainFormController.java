@@ -1,8 +1,8 @@
 package View_Controller;
-
 import Model.Inventory;
 import Model.Part;
 import Model.Product;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -158,12 +158,30 @@ public class MainFormController implements Initializable {
               int queryAsInt = Integer.parseInt(searchQuery);
               searchResult.add(Inventory.lookUpPartByID(queryAsInt));
               partsTable.setItems(searchResult);
+
+              if (searchResult.get(0) == null) {
+                  Alert alert = new Alert(Alert.AlertType.ERROR);
+                  alert.setTitle("Search Empty");
+                  alert.setContentText("No results found.");
+                  alert.showAndWait();
+              }
           }
           catch (NumberFormatException e) {
-
               partsTable.setItems(Inventory.lookUpPartByName(searchQuery));
 
+              if (Inventory.lookUpPartByName(searchQuery).isEmpty()) {
+                  Alert alert = new Alert(Alert.AlertType.ERROR);
+                  alert.setTitle("Search Empty");
+                  alert.setContentText("No results found.");
+                  alert.showAndWait();
+              }
           }
+          finally {
+              if (searchQuery.equals("")) {
+                  partsTable.setItems(Inventory.getAllParts());
+              }
+          }
+
 
 
     }

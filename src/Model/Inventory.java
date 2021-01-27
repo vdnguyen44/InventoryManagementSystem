@@ -27,18 +27,6 @@ public class Inventory {
 
     public static Part lookUpPartByID(int partID) {
 
-//        String searchQuery = String.valueOf(partID).toLowerCase();
-//        ObservableList<Part> searchResult = FXCollections.observableArrayList();
-//
-//        for (Part part : allParts) {
-//           String partIDString = String.valueOf(part.getPartID()).toLowerCase();
-//           if (partIDString.contains(searchQuery)) {
-//                searchResult.add(part);
-//           }
-//        }
-//
-//        return searchResult;
-
         for (Part part : allParts) {
             if (partID == part.getPartID()) {
                 return part;

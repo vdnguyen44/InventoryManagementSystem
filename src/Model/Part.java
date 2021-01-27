@@ -2,12 +2,12 @@ package Model;
 
 public abstract class Part {
 
-    protected int partID;
-    protected String partName;
-    protected double partPrice;
-    protected int partStock;
-    protected int partMin;
-    protected int partMax;
+    private int partID;
+    private String partName;
+    private double partPrice;
+    private int partStock;
+    private int partMin;
+    private int partMax;
 
     public Part(int partID, String partName, double partPrice, int partStock, int partMin, int partMax) {
         this.partID = partID;

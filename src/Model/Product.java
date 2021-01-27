@@ -4,7 +4,7 @@ import javafx.collections.ObservableList;
 
 
 public class Product {
-
+// associatedParts shouldn't be static
     private static ObservableList<Part> associatedParts = FXCollections.observableArrayList();;
     protected int productID;
     protected String productName;

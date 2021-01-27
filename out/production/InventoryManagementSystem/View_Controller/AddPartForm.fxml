@@ -56,7 +56,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="partIDTextField" layoutX="150.0" layoutY="100.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField fx:id="partIDTextField" disable="true" editable="false" layoutX="150.0" layoutY="100.0" prefHeight="29.0" prefWidth="134.0" promptText="Auto Gen-Disabled" />
             <TextField fx:id="partNameTextField" layoutX="150.0" layoutY="145.0" prefHeight="29.0" prefWidth="114.0" />
             <TextField fx:id="partStockTextField" layoutX="150.0" layoutY="190.0" prefHeight="29.0" prefWidth="114.0" />
             <TextField fx:id="partPriceTextField" layoutX="150.0" layoutY="235.0" prefHeight="29.0" prefWidth="114.0" />

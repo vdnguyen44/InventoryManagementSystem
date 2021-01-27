@@ -64,15 +64,18 @@ public class AddPartFormController {
     @FXML
     private Button cancelButton;
 
+    private static int partCount = 1;
+
     @FXML
     void addPart(ActionEvent event) throws IOException {
-        int partID = Integer.parseInt(partIDTextField.getText());
+        // int partID = Integer.parseInt(partIDTextField.getText());
+
+        int partID = partCount;
         String partName = partNameTextField.getText();
         int partStock = Integer.parseInt(partStockTextField.getText());
         double partPrice = Double.parseDouble(partPriceTextField.getText());
         int partMax = Integer.parseInt(partMaxTextField.getText());
         int partMin = Integer.parseInt(partMinTextField.getText());
-        // boolean inHouseOrOutSourced;
         int machineID;
         String companyName;
 
@@ -85,12 +88,17 @@ public class AddPartFormController {
             Inventory.addPart(new Outsourced(partID, partName, partPrice, partStock, partMin, partMax, companyName));
         }
 
+        partCount ++;
+
+
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         Scene mainScene = new Scene(mainLoader);
 
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setScene(mainScene);
         window.show();
+
+
 
 
     }

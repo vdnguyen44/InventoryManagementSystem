@@ -3,6 +3,8 @@ package View_Controller;
 import Model.Inventory;
 import Model.Part;
 import Model.Product;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -139,6 +141,30 @@ public class MainFormController implements Initializable {
 
     @FXML
     void searchPartsTable(ActionEvent event) {
+    // Part = type of class being scanned in list, part = element variable, after the colons is the list, getAllParts returns that list
+//        for (Part part : Inventory.getAllParts()) {
+//
+//        }
+//        // too specific, come up with method to check for whether partID or partName is being searched, 36:49
+//        int searchQuery = Integer.parseInt(searchPartTextField.getText());
+//        ObservableList<Part> searchResult = FXCollections.observableArrayList();
+//        searchResult.add(Inventory.lookUpPartByID(searchQuery));
+//        partsTable.setItems(searchResult);
+
+          String searchQuery = searchPartTextField.getText();
+          ObservableList<Part> searchResult = FXCollections.observableArrayList();
+
+          try {
+              int queryAsInt = Integer.parseInt(searchQuery);
+              searchResult.add(Inventory.lookUpPartByID(queryAsInt));
+              partsTable.setItems(searchResult);
+          }
+          catch (NumberFormatException e) {
+
+              partsTable.setItems(Inventory.lookUpPartByName(searchQuery));
+
+          }
+
 
     }
 
@@ -147,9 +173,12 @@ public class MainFormController implements Initializable {
 
     }
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //this is the first method called anytime this controller is instantiated
+        //at first program wouldn't run because "implements Initializable" wasn't specified at beginning of class
 
         partsTable.setItems(Inventory.getAllParts());
 

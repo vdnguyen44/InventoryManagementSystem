@@ -14,6 +14,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -90,18 +92,62 @@ public class MainFormController implements Initializable {
     @FXML
     private Button exitButton;
 
+    void searchPartsTable() {
+        String searchQuery = searchPartTextField.getText();
+        ObservableList<Part> searchResult = FXCollections.observableArrayList();
+
+        try {
+            int queryAsInt = Integer.parseInt(searchQuery);
+            searchResult.add(Inventory.lookUpPartByID(queryAsInt));
+            partsTable.setItems(searchResult);
+
+            if (searchResult.get(0) == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Search Empty");
+                alert.setHeaderText("No results found.");
+                alert.showAndWait();
+            }
+        }
+        catch (NumberFormatException e) {
+            partsTable.setItems(Inventory.lookUpPartByName(searchQuery));
+
+            if (Inventory.lookUpPartByName(searchQuery).isEmpty()) {
+                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
+                emptyResultAlert.setTitle("Empty Search");
+                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.showAndWait();
+            }
+        }
+        finally {
+            if (searchQuery.equals("")) {
+                partsTable.setItems(Inventory.getAllParts());
+            }
+        }
+    }
+
     @FXML
-    void deletePartFromTable(ActionEvent event) {
+    void deletePartBtn(ActionEvent event) {
+
+        Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
+        if (Inventory.deletePart(selectedPart)) {
+            partsTable.setItems(Inventory.getAllParts());
+        }
+        else {
+            Alert notFoundAlert = new Alert(Alert.AlertType.ERROR);
+            notFoundAlert.setTitle("Delete Part Error");
+            notFoundAlert.setHeaderText("No part was deleted.");
+            notFoundAlert.showAndWait();
+        }
 
     }
 
     @FXML
-    void deleteProductFromTable(ActionEvent event) {
+    void deleteProductBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void displayAddPartForm(ActionEvent event) throws IOException {
+    void displayAddPartBtn(ActionEvent event) throws IOException {
         Parent addPartFormLoader = FXMLLoader.load(getClass().getResource("AddPartForm.fxml"));
         Scene addPartScene = new Scene(addPartFormLoader);
 
@@ -111,12 +157,12 @@ public class MainFormController implements Initializable {
     }
 
     @FXML
-    void displayAddProductForm(ActionEvent event) {
+    void displayAddProductBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void displayModifyPartForm(ActionEvent event) throws IOException {
+    void displayModifyPartBtn(ActionEvent event) throws IOException {
 
         Parent modifyPartFormLoader = FXMLLoader.load(getClass().getResource("AddPartForm.fxml"));
         Scene modifyPartScene = new Scene(modifyPartFormLoader);
@@ -128,19 +174,19 @@ public class MainFormController implements Initializable {
     }
 
     @FXML
-    void displayModifyProductForm(ActionEvent event) {
+    void displayModifyProductBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void exitApplication(ActionEvent event) {
+    void exitBtn(ActionEvent event) {
         Stage stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
 
     }
 
     @FXML
-    void searchPartsTable(ActionEvent event) {
+    void searchPartsTableBtn(ActionEvent event) {
     // Part = type of class being scanned in list, part = element variable, after the colons is the list, getAllParts returns that list
 //        for (Part part : Inventory.getAllParts()) {
 //
@@ -151,39 +197,14 @@ public class MainFormController implements Initializable {
 //        searchResult.add(Inventory.lookUpPartByID(searchQuery));
 //        partsTable.setItems(searchResult);
 
-          String searchQuery = searchPartTextField.getText();
-          ObservableList<Part> searchResult = FXCollections.observableArrayList();
+        searchPartsTable();
+    }
 
-          try {
-              int queryAsInt = Integer.parseInt(searchQuery);
-              searchResult.add(Inventory.lookUpPartByID(queryAsInt));
-              partsTable.setItems(searchResult);
-
-              if (searchResult.get(0) == null) {
-                  Alert alert = new Alert(Alert.AlertType.ERROR);
-                  alert.setTitle("Search Empty");
-                  alert.setContentText("No results found.");
-                  alert.showAndWait();
-              }
-          }
-          catch (NumberFormatException e) {
-              partsTable.setItems(Inventory.lookUpPartByName(searchQuery));
-
-              if (Inventory.lookUpPartByName(searchQuery).isEmpty()) {
-                  Alert alert = new Alert(Alert.AlertType.ERROR);
-                  alert.setTitle("Search Empty");
-                  alert.setContentText("No results found.");
-                  alert.showAndWait();
-              }
-          }
-          finally {
-              if (searchQuery.equals("")) {
-                  partsTable.setItems(Inventory.getAllParts());
-              }
-          }
-
-
-
+    @FXML
+    void searchPartsTableEnter (KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER)  {
+            searchPartsTable();
+        }
     }
 
     @FXML
@@ -197,7 +218,7 @@ public class MainFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //this is the first method called anytime this controller is instantiated
         //at first program wouldn't run because "implements Initializable" wasn't specified at beginning of class
-
+        // this code initializes the table and displays all available parts when main screen is loaded
         partsTable.setItems(Inventory.getAllParts());
 
         partIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
@@ -208,7 +229,9 @@ public class MainFormController implements Initializable {
 
         partPriceCol.setCellValueFactory(new PropertyValueFactory<>("partPrice"));
 
+        partsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
+        // initializes the products table
         productsTable.setItems(Inventory.getAllProducts());
 
         productIDCol.setCellValueFactory(new PropertyValueFactory<>("productID"));

@@ -68,7 +68,6 @@ public class AddPartFormController {
 
     @FXML
     void addPart(ActionEvent event) throws IOException {
-        // int partID = Integer.parseInt(partIDTextField.getText());
 
         int partID = partCount;
         String partName = partNameTextField.getText();

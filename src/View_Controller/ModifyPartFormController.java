@@ -1,16 +1,15 @@
 package View_Controller;
 
+import Model.InHouse;
+import Model.Outsourced;
+import Model.Part;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,6 +18,9 @@ public class ModifyPartFormController {
 
     @FXML
     private TitledPane modifyPartForm;
+
+    @FXML
+    private ToggleGroup sourceToggleGroup;
 
     @FXML
     private RadioButton inHouseSelection;
@@ -84,6 +86,27 @@ public class ModifyPartFormController {
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setScene(mainScene);
         window.show();
+
+    }
+
+    public void sendPart (Part part) {
+        partIDTextField.setText(String.valueOf(part.getPartID()));
+        partNameTextField.setText(part.getPartName());
+        partPriceTextField.setText(String.valueOf(part.getPartPrice()));
+        partStockTextField.setText(String.valueOf(part.getPartStock()));
+        partMinTextField.setText(String.valueOf(part.getPartMin()));
+        partMaxTextField.setText(String.valueOf(part.getPartMax()));
+
+        if (part instanceof InHouse) {
+            inHouseSelection.setSelected(true);
+            mIDcompanyNameLabel.setText("Machine ID");
+            mIDcompanyNameTextField.setText(String.valueOf(((InHouse) part).getMachineID()));
+        }
+        else if (part instanceof Outsourced) {
+            outSourcedSelection.setSelected(true);
+            mIDcompanyNameLabel.setText("Company Name");
+            mIDcompanyNameTextField.setText(((Outsourced) part).getCompanyName());
+        }
 
     }
 

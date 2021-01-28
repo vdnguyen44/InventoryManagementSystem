@@ -164,12 +164,21 @@ public class MainFormController implements Initializable {
     @FXML
     void displayModifyPartBtn(ActionEvent event) throws IOException {
 
-        Parent modifyPartFormLoader = FXMLLoader.load(getClass().getResource("AddPartForm.fxml"));
-        Scene modifyPartScene = new Scene(modifyPartFormLoader);
+        // created fxmlloader object and let it know which view to use
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("ModifyPartForm.fxml"));
+        Parent partsTableParent = loader.load();
+
+        Scene modifyPartScene = new Scene(partsTableParent);
+        // letting object know which controller to use
+        ModifyPartFormController ModPartController = loader.getController();
+        ModPartController.sendPart(partsTable.getSelectionModel().getSelectedItem());
 
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+
         window.setScene(modifyPartScene);
         window.show();
+
 
     }
 

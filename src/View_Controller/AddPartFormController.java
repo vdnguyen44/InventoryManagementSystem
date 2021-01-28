@@ -104,7 +104,9 @@ public class AddPartFormController {
 
     @FXML
     void inHouseSelected(ActionEvent event) {
+
         mIDcompanyNameLabel.setText("Machine ID");
+
     }
 
     @FXML

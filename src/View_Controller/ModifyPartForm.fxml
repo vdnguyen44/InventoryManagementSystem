@@ -5,6 +5,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -16,8 +17,11 @@
                <font>
                   <Font size="14.0" />
                </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="sourceToggleGroup" />
+               </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="outSourcedSelection" layoutX="175.0" layoutY="32.0" mnemonicParsing="false" onAction="#outSourcedSelected" text="Outsourced">
+            <RadioButton fx:id="outSourcedSelection" layoutX="175.0" layoutY="32.0" mnemonicParsing="false" onAction="#outSourcedSelected" text="Outsourced" toggleGroup="$sourceToggleGroup">
                <font>
                   <Font size="14.0" />
                </font>
@@ -52,7 +56,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="partIDTextField" layoutX="150.0" layoutY="102.0" prefHeight="29.0" prefWidth="114.0" />
+            <TextField fx:id="partIDTextField" disable="true" layoutX="150.0" layoutY="102.0" prefHeight="29.0" prefWidth="114.0" />
             <TextField fx:id="partNameTextField" layoutX="150.0" layoutY="141.0" prefHeight="29.0" prefWidth="114.0" />
             <TextField fx:id="partStockTextField" layoutX="150.0" layoutY="183.0" prefHeight="29.0" prefWidth="114.0" />
             <TextField fx:id="partPriceTextField" layoutX="150.0" layoutY="227.0" prefHeight="29.0" prefWidth="114.0" />

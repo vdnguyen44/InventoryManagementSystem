@@ -19,6 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -163,22 +164,27 @@ public class MainFormController implements Initializable {
 
     @FXML
     void displayModifyPartBtn(ActionEvent event) throws IOException {
+        try {
+            // created fxmlloader object and let it know which view to use
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("ModifyPartForm.fxml"));
+            Parent partsTableParent = loader.load();
 
-        // created fxmlloader object and let it know which view to use
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("ModifyPartForm.fxml"));
-        Parent partsTableParent = loader.load();
+            Scene modifyPartScene = new Scene(partsTableParent);
+            // letting object know which controller to use
+            ModifyPartFormController ModPartController = loader.getController();
+            ModPartController.sendPart(partsTable.getSelectionModel().getSelectedItem());
 
-        Scene modifyPartScene = new Scene(partsTableParent);
-        // letting object know which controller to use
-        ModifyPartFormController ModPartController = loader.getController();
-        ModPartController.sendPart(partsTable.getSelectionModel().getSelectedItem());
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-
-        window.setScene(modifyPartScene);
-        window.show();
-
+            window.setScene(modifyPartScene);
+            window.show();
+        } catch (RuntimeException e) {
+            Alert notSelectedAlert = new Alert(Alert.AlertType.ERROR);
+            notSelectedAlert.setTitle("Part Selection Error");
+            notSelectedAlert.setHeaderText("No part is selected.");
+            notSelectedAlert.showAndWait();
+        }
 
     }
 

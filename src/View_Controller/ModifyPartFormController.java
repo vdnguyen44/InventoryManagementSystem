@@ -1,8 +1,10 @@
 package View_Controller;
 
 import Model.InHouse;
+import Model.Inventory;
 import Model.Outsourced;
 import Model.Part;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,9 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import static Model.Inventory.getAllParts;
+import static Model.Inventory.updatePart;
 
 public class ModifyPartFormController {
 
@@ -59,6 +64,11 @@ public class ModifyPartFormController {
     private Button cancelButton;
 
     @FXML
+    private int partID;
+
+    private int partIndex;
+
+    @FXML
     void inHouseSelected(ActionEvent event) {
 
         mIDcompanyNameLabel.setText("Machine ID");
@@ -73,12 +83,63 @@ public class ModifyPartFormController {
     }
 
     @FXML
-    void modifyPart(ActionEvent event) {
+    void modifyPartBtn(ActionEvent event) throws IOException {
+
+        String partName = partNameTextField.getText();
+        int partStock = Integer.parseInt(partStockTextField.getText());
+        double partPrice = Double.parseDouble(partPriceTextField.getText());
+        int partMin = Integer.parseInt(partMinTextField.getText());
+        int partMax = Integer.parseInt(partMaxTextField.getText());
+        String mIDcompanyName = mIDcompanyNameTextField.getText();
+
+        if (inHouseSelection.isSelected()) {
+
+            if (Inventory.lookupPart(partID) instanceof InHouse) {
+                InHouse updatedPart = (InHouse) Inventory.lookupPart(partID);
+                assert updatedPart != null;
+                updatedPart.setPartName(partName);
+                updatedPart.setPartPrice(partPrice);
+                updatedPart.setPartStock(partStock);
+                updatedPart.setPartMin(partMin);
+                updatedPart.setPartMax(partMax);
+                updatedPart.setMachineID(Integer.parseInt(mIDcompanyName));
+            }
+            else {
+                InHouse updatedPart = new InHouse (partID, partName, partPrice, partStock, partMin, partMax, Integer.parseInt(mIDcompanyName));
+                updatePart(partIndex, updatedPart);
+            }
+        }
+        else if (outSourcedSelection.isSelected()) {
+
+            if (Inventory.lookupPart(partID) instanceof Outsourced) {
+                Outsourced updatedPart = (Outsourced) Inventory.lookupPart(partID);
+                assert updatedPart != null;
+                updatedPart.setPartName(partName);
+                updatedPart.setPartPrice(partPrice);
+                updatedPart.setPartStock(partStock);
+                updatedPart.setPartMin(partMin);
+                updatedPart.setPartMin(partMax);
+                updatedPart.setCompanyName(mIDcompanyName);
+            }
+            else {
+                Outsourced updatedPart = new Outsourced(partID, partName, partPrice, partStock, partMin, partMax, mIDcompanyName);
+                updatePart(partIndex, updatedPart);
+            }
+        }
+
+        Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+        Scene mainScene = new Scene(mainLoader);
+
+        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        window.setScene(mainScene);
+        window.show();
+
+
 
     }
 
     @FXML
-    void returnToMain(ActionEvent event) throws IOException {
+    void modifyPartCancelBtn(ActionEvent event) throws IOException {
 
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         Scene mainScene = new Scene(mainLoader);
@@ -89,7 +150,9 @@ public class ModifyPartFormController {
 
     }
 
-    public void sendPart (Part part) {
+    public void initializePartData (Part part) {
+        partID = part.getPartID();
+        partIndex = Inventory.getAllParts().indexOf(part);
         partIDTextField.setText(String.valueOf(part.getPartID()));
         partNameTextField.setText(part.getPartName());
         partPriceTextField.setText(String.valueOf(part.getPartPrice()));
@@ -109,5 +172,12 @@ public class ModifyPartFormController {
         }
 
     }
+
+//    public int getPartIndex (Part part) {
+//
+//       ObservableList<Part> allParts = Inventory.getAllParts();
+//       return allParts.indexOf(part);
+//
+//    }
 
 }

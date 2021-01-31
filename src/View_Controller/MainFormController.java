@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 public class MainFormController implements Initializable {
@@ -93,13 +94,19 @@ public class MainFormController implements Initializable {
     @FXML
     private Button exitButton;
 
+//    int getPartIndex() {
+//       Part selectedRow = partsTable.getSelectionModel().getSelectedItem();
+//       ObservableList<Part> allParts = Inventory.getAllParts();
+//       return allParts.indexOf(selectedRow);
+//    }
+
     void searchPartsTable() {
         String searchQuery = searchPartTextField.getText();
         ObservableList<Part> searchResult = FXCollections.observableArrayList();
 
         try {
-            int queryAsInt = Integer.parseInt(searchQuery);
-            searchResult.add(Inventory.lookUpPartByID(queryAsInt));
+            int queryInt = Integer.parseInt(searchQuery);
+            searchResult.add(Inventory.lookupPart(queryInt));
             partsTable.setItems(searchResult);
 
             if (searchResult.get(0) == null) {
@@ -110,9 +117,9 @@ public class MainFormController implements Initializable {
             }
         }
         catch (NumberFormatException e) {
-            partsTable.setItems(Inventory.lookUpPartByName(searchQuery));
+            partsTable.setItems(Inventory.lookupPart(searchQuery));
 
-            if (Inventory.lookUpPartByName(searchQuery).isEmpty()) {
+            if (Inventory.lookupPart(searchQuery).isEmpty()) {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
                 emptyResultAlert.setTitle("Empty Search");
                 emptyResultAlert.setHeaderText("No results found.");
@@ -171,9 +178,12 @@ public class MainFormController implements Initializable {
             Parent partsTableParent = loader.load();
 
             Scene modifyPartScene = new Scene(partsTableParent);
+
             // letting object know which controller to use
             ModifyPartFormController ModPartController = loader.getController();
-            ModPartController.sendPart(partsTable.getSelectionModel().getSelectedItem());
+            ModPartController.initializePartData(partsTable.getSelectionModel().getSelectedItem());
+            // sending to modifyPartBtn didn't work because that method requires output of event but part is provided
+
 
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
@@ -243,6 +253,22 @@ public class MainFormController implements Initializable {
         partStockCol.setCellValueFactory(new PropertyValueFactory<>("partStock"));
 
         partPriceCol.setCellValueFactory(new PropertyValueFactory<>("partPrice"));
+
+        // add input to only allow two decimal places
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+
+        partPriceCol.setCellFactory(price -> new TableCell<Part, Double>() {
+
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                }
+                else {
+                    setText(currencyFormatter.format(price));
+                }
+            }
+        });
 
         partsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 

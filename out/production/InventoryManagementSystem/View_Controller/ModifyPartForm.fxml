@@ -68,12 +68,12 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="saveButton" layoutX="350.0" layoutY="397.0" mnemonicParsing="false" onAction="#modifyPart" text="Save">
+            <Button fx:id="saveButton" layoutX="350.0" layoutY="397.0" mnemonicParsing="false" onAction="#modifyPartBtn" text="Save">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button fx:id="cancelButton" layoutX="454.0" layoutY="398.0" mnemonicParsing="false" onAction="#returnToMain" text="Cancel">
+            <Button fx:id="cancelButton" layoutX="454.0" layoutY="398.0" mnemonicParsing="false" onAction="#modifyPartCancelBtn" text="Cancel">
                <font>
                   <Font size="14.0" />
                </font>

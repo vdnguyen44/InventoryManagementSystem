@@ -67,7 +67,7 @@ public class AddPartFormController {
     private static int partCount = 1;
 
     @FXML
-    void addPart(ActionEvent event) throws IOException {
+    void addPartBtn(ActionEvent event) throws IOException {
 
         int partID = partCount;
         String partName = partNameTextField.getText();
@@ -116,7 +116,7 @@ public class AddPartFormController {
     }
 
     @FXML
-    void returnToMain(ActionEvent event) throws IOException {
+    void addPartCancelBtn(ActionEvent event) throws IOException {
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         Scene mainScene = new Scene(mainLoader);
 

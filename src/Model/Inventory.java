@@ -25,7 +25,7 @@ public class Inventory {
         return allProducts;
     }
 
-    public static Part lookUpPartByID(int partID) {
+    public static Part lookupPart(int partID) {
 
         for (Part part : allParts) {
             if (partID == part.getPartID()) {
@@ -35,7 +35,7 @@ public class Inventory {
         return null;
     }
 
-    public static ObservableList<Part> lookUpPartByName(String partName) {
+    public static ObservableList<Part> lookupPart(String partName) {
         ObservableList<Part> searchResult = FXCollections.observableArrayList();
 
         for (Part part : allParts) {
@@ -44,12 +44,15 @@ public class Inventory {
             }
         }
         return searchResult;
-
     }
 
     public static boolean deletePart(Part selectedPart) {
         allParts.remove(selectedPart);
         return true;
+    }
+
+    public static void updatePart(int index, Part selectedPart) {
+        allParts.set(index, selectedPart);
     }
 
 

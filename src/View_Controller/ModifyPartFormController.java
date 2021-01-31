@@ -173,11 +173,4 @@ public class ModifyPartFormController {
 
     }
 
-//    public int getPartIndex (Part part) {
-//
-//       ObservableList<Part> allParts = Inventory.getAllParts();
-//       return allParts.indexOf(part);
-//
-//    }
-
 }

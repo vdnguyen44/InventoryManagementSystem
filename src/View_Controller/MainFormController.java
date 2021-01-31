@@ -94,11 +94,6 @@ public class MainFormController implements Initializable {
     @FXML
     private Button exitButton;
 
-//    int getPartIndex() {
-//       Part selectedRow = partsTable.getSelectionModel().getSelectedItem();
-//       ObservableList<Part> allParts = Inventory.getAllParts();
-//       return allParts.indexOf(selectedRow);
-//    }
 
     void searchPartsTable() {
         String searchQuery = searchPartTextField.getText();
@@ -165,7 +160,14 @@ public class MainFormController implements Initializable {
     }
 
     @FXML
-    void displayAddProductBtn(ActionEvent event) {
+    void displayAddProductBtn(ActionEvent event) throws IOException {
+
+        Parent addProductFormLoader = FXMLLoader.load(getClass().getResource("AddProductForm.fxml"));
+        Scene addProductScene = new Scene(addProductFormLoader);
+
+        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        window.setScene(addProductScene);
+        window.show();
 
     }
 

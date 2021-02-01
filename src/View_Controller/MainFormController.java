@@ -139,7 +139,7 @@ public class MainFormController implements Initializable {
             Alert notFoundAlert = new Alert(Alert.AlertType.ERROR);
             notFoundAlert.setTitle("Delete Part Error");
             notFoundAlert.setHeaderText("No part was deleted.");
-            notFoundAlert.showAndWait();
+            notFoundAlert.show();
         }
 
     }
@@ -284,6 +284,19 @@ public class MainFormController implements Initializable {
         productStockCol.setCellValueFactory(new PropertyValueFactory<>("productStock"));
 
         productPriceCol.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
+
+        productPriceCol.setCellFactory(price -> new TableCell<Product, Double>() {
+
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                }
+                else {
+                    setText(currencyFormatter.format(price));
+                }
+            }
+        });
 
 
     }

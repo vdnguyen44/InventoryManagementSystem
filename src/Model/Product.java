@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 
 public class Product {
 // associatedParts shouldn't be static
-    private static ObservableList<Part> associatedParts = FXCollections.observableArrayList();;
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();;
     protected int productID;
     protected String productName;
     protected double productPrice;
@@ -70,7 +70,7 @@ public class Product {
         this.productMax = productMax;
     }
 
-    public static void addAssociatedPart(Part part) {
+    public void addAssociatedPart(Part part) {
         associatedParts.add(part);
     }
 
@@ -84,7 +84,7 @@ public class Product {
         return false;
     }
 
-    public static ObservableList<Part> getAllAssociatedParts() {
+    public ObservableList<Part> getAllAssociatedParts() {
 
         return associatedParts;
     }

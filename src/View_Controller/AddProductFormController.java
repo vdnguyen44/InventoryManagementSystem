@@ -14,6 +14,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -96,25 +98,82 @@ public class AddProductFormController implements Initializable {
 
     private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
+    void searchAvailablePartsTable() {
+        String searchQuery = searchPartTextField.getText();
+        ObservableList<Part> searchResult = FXCollections.observableArrayList();
+
+        try {
+            int queryInt = Integer.parseInt(searchQuery);
+
+
+
+            if (Inventory.lookupPart(queryInt) == null) {
+                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
+                emptyResultAlert.setTitle("Search Empty");
+                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.show();
+            }
+            else {
+                searchResult.add(Inventory.lookupPart(queryInt));
+                availablePartsTable.setItems(searchResult);
+            }
+
+
+
+        }
+        catch (NumberFormatException e) {
+            availablePartsTable.setItems(Inventory.lookupPart(searchQuery));
+
+            if (Inventory.lookupPart(searchQuery).isEmpty()) {
+                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
+                emptyResultAlert.setTitle("Empty Search");
+                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.show();
+            }
+        }
+        finally {
+            if (searchQuery.equals("")) {
+                availablePartsTable.setItems(Inventory.getAllParts());
+            }
+        }
+    }
+
     @FXML
     void addPartToAssociatedParts(ActionEvent event) {
-        Part selectedPart = availablePartsTable.getSelectionModel().getSelectedItem();
 
-        if (associatedParts.contains(selectedPart)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Part already added");
-            alert.setHeaderText("The part has already been added, can only be added once.");
-            alert.show();
-        }
-        else {
-            associatedParts.add(selectedPart);
-        }
+//        try {
+            Part selectedPart = availablePartsTable.getSelectionModel().getSelectedItem();
+
+            if (availablePartsTable.getSelectionModel().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Part Selection Error");
+                alert.setHeaderText("No part is selected.");
+                alert.show();
+            }
+
+            else if (associatedParts.contains(selectedPart)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Duplicate Part Error");
+                alert.setHeaderText("The part has already been added, can only be added once.");
+                alert.show();
+            }
+            else {
+                associatedParts.add(selectedPart);
+            }
+            availablePartsTable.getSelectionModel().clearSelection();
+//        }
+//        catch (IllegalArgumentException e) {
+//            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+//            noneSelectedAlert.setTitle("Part Selection Error");
+//            noneSelectedAlert.setHeaderText("No part is selected.");
+//            noneSelectedAlert.show();
+//        }
     }
 
     @FXML
     void addProductBtn(ActionEvent event) throws IOException {
 
-        int productID = productCount;
+        int productID = productCount++;
         String productName = productNameTextField.getText();
         int productStock = Integer.parseInt(productStockTextField.getText());
         double productPrice = Double.parseDouble(productPriceTextField.getText());
@@ -122,10 +181,8 @@ public class AddProductFormController implements Initializable {
         int productMax = Integer.parseInt(productMaxTextField.getText());
 
         Product newProduct = new Product(productID, productName, productPrice, productStock, productMin, productMax);
-        newProduct.getAllAssociatedParts().addAll(associatedParts);
+        newProduct.getAllAssociatedParts().addAll(associatedParts); // use loop to use addAssociatedPartFunction?
         Inventory.addProduct(newProduct);
-
-        productCount ++;
 
 
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
@@ -156,11 +213,36 @@ public class AddProductFormController implements Initializable {
     @FXML
     void removeAssociatedPartBtn(ActionEvent event) {
 
+        Part selectedPart = associatedPartsTable.getSelectionModel().getSelectedItem();
+
+        if (associatedParts.isEmpty()) {
+            Alert notFoundAlert = new Alert(Alert.AlertType.ERROR);
+            notFoundAlert.setTitle("Delete Part Error");
+            notFoundAlert.setHeaderText("No part was deleted.");
+            notFoundAlert.show();
+        }
+
+        else if (associatedPartsTable.getSelectionModel().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Part Selection Error");
+            alert.setHeaderText("No part is selected.");
+            alert.show();
+        }
+        else {
+            associatedParts.remove(selectedPart);
+        }
     }
 
     @FXML
     void searchAvailablePartsBtn(ActionEvent event) {
+        searchAvailablePartsTable();
+    }
 
+    @FXML
+    void searchAvailablePartsTableEnter(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER)  {
+            searchAvailablePartsTable();
+        }
     }
 
     @Override

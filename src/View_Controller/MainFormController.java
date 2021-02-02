@@ -101,15 +101,22 @@ public class MainFormController implements Initializable {
 
         try {
             int queryInt = Integer.parseInt(searchQuery);
-            searchResult.add(Inventory.lookupPart(queryInt));
-            partsTable.setItems(searchResult);
 
-            if (searchResult.get(0) == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Search Empty");
-                alert.setHeaderText("No results found.");
-                alert.showAndWait();
+
+
+            if (Inventory.lookupPart(queryInt) == null) {
+                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
+                emptyResultAlert.setTitle("Search Empty");
+                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.show();
             }
+            else {
+                searchResult.add(Inventory.lookupPart(queryInt));
+                partsTable.setItems(searchResult);
+            }
+
+
+
         }
         catch (NumberFormatException e) {
             partsTable.setItems(Inventory.lookupPart(searchQuery));
@@ -118,7 +125,7 @@ public class MainFormController implements Initializable {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
                 emptyResultAlert.setTitle("Empty Search");
                 emptyResultAlert.setHeaderText("No results found.");
-                emptyResultAlert.showAndWait();
+                emptyResultAlert.show();
             }
         }
         finally {
@@ -131,16 +138,32 @@ public class MainFormController implements Initializable {
     @FXML
     void deletePartBtn(ActionEvent event) {
 
-        Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
-        if (Inventory.deletePart(selectedPart)) {
-            partsTable.setItems(Inventory.getAllParts());
-        }
-        else {
+            Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
+
+        if (Inventory.getAllParts().isEmpty()) {
             Alert notFoundAlert = new Alert(Alert.AlertType.ERROR);
             notFoundAlert.setTitle("Delete Part Error");
             notFoundAlert.setHeaderText("No part was deleted.");
             notFoundAlert.show();
         }
+
+            else if (partsTable.getSelectionModel().isEmpty()){
+                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+                noneSelectedAlert.setTitle("Part Selection Error");
+                noneSelectedAlert.setHeaderText("No part is selected.");
+                noneSelectedAlert.show();
+            }
+            else {
+                Inventory.deletePart(selectedPart);
+            }
+//        uses return result of deletePart
+//        if (Inventory.deletePart(selectedPart)) {
+//            partsTable.setItems(Inventory.getAllParts());
+//        }
+//    }
+
+
+
 
     }
 
@@ -173,7 +196,8 @@ public class MainFormController implements Initializable {
 
     @FXML
     void displayModifyPartBtn(ActionEvent event) throws IOException {
-        try {
+        try
+        {
             // created fxmlloader object and let it know which view to use
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("ModifyPartForm.fxml"));
@@ -191,11 +215,13 @@ public class MainFormController implements Initializable {
 
             window.setScene(modifyPartScene);
             window.show();
-        } catch (RuntimeException e) {
-            Alert notSelectedAlert = new Alert(Alert.AlertType.ERROR);
-            notSelectedAlert.setTitle("Part Selection Error");
-            notSelectedAlert.setHeaderText("No part is selected.");
-            notSelectedAlert.showAndWait();
+        }
+        catch (NullPointerException e)
+        {
+            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+            noneSelectedAlert.setTitle("Part Selection Error");
+            noneSelectedAlert.setHeaderText("No part is selected.");
+            noneSelectedAlert.showAndWait();
         }
 
     }
@@ -259,18 +285,25 @@ public class MainFormController implements Initializable {
         // add input to only allow two decimal places
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
 
-        partPriceCol.setCellFactory(price -> new TableCell<Part, Double>() {
+            partPriceCol.setCellFactory(price -> new TableCell<Part, Double>() {
 
-            protected void updateItem(Double price, boolean empty) {
-                super.updateItem(price, empty);
-                if (empty) {
-                    setText(null);
-                }
-                else {
-                    setText(currencyFormatter.format(price));
-                }
-            }
-        });
+
+                protected void updateItem(Double price, boolean empty) {
+
+                    super.updateItem(price, empty);
+                    if (empty) {
+                        setText(null);
+
+                    } else {
+                        setText(currencyFormatter.format(price));
+                    }
+
+                    }
+
+
+            });
+
+
 
         partsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 

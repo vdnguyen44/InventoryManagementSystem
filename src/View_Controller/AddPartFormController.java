@@ -69,7 +69,7 @@ public class AddPartFormController {
     @FXML
     void addPartBtn(ActionEvent event) throws IOException {
 
-        int partID = partCount;
+        int partID = partCount++;
         String partName = partNameTextField.getText();
         int partStock = Integer.parseInt(partStockTextField.getText());
         double partPrice = Double.parseDouble(partPriceTextField.getText());
@@ -86,8 +86,6 @@ public class AddPartFormController {
             companyName = mIDcompanyNameTextField.getText();
             Inventory.addPart(new Outsourced(partID, partName, partPrice, partStock, partMin, partMax, companyName));
         }
-
-        partCount ++;
 
 
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));

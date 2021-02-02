@@ -57,7 +57,7 @@
                   <TableColumn fx:id="availablePartPriceCol" minWidth="0.0" prefWidth="169.0" style="-fx-font-size: 16;" text="Price/Cost per Unit" />
                </columns>
             </TableView>
-            <TextField fx:id="searchPartTextField" layoutX="656.0" layoutY="26.0" />
+            <TextField fx:id="searchPartTextField" layoutX="656.0" layoutY="26.0" onKeyPressed="#searchAvailablePartsTableEnter" />
             <Button fx:id="searchPartButton" layoutX="840.0" layoutY="26.0" mnemonicParsing="false" onAction="#searchAvailablePartsBtn" text="Search" />
             <Button fx:id="addPartButton" layoutX="767.0" layoutY="275.0" mnemonicParsing="false" onAction="#addPartToAssociatedParts" text="Add" />
             <TableView fx:id="associatedPartsTable" layoutX="429.0" layoutY="314.0" prefHeight="200.0" prefWidth="471.0">

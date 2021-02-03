@@ -102,8 +102,6 @@ public class MainFormController implements Initializable {
         try {
             int queryInt = Integer.parseInt(searchQuery);
 
-
-
             if (Inventory.lookupPart(queryInt) == null) {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
                 emptyResultAlert.setTitle("Search Empty");
@@ -114,8 +112,6 @@ public class MainFormController implements Initializable {
                 searchResult.add(Inventory.lookupPart(queryInt));
                 partsTable.setItems(searchResult);
             }
-
-
 
         }
         catch (NumberFormatException e) {
@@ -147,23 +143,15 @@ public class MainFormController implements Initializable {
             notFoundAlert.show();
         }
 
-            else if (partsTable.getSelectionModel().isEmpty()){
+        else if (partsTable.getSelectionModel().isEmpty()) {
                 Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
                 noneSelectedAlert.setTitle("Part Selection Error");
                 noneSelectedAlert.setHeaderText("No part is selected.");
                 noneSelectedAlert.show();
-            }
-            else {
+        }
+        else {
                 Inventory.deletePart(selectedPart);
-            }
-//        uses return result of deletePart
-//        if (Inventory.deletePart(selectedPart)) {
-//            partsTable.setItems(Inventory.getAllParts());
-//        }
-//    }
-
-
-
+        }
 
     }
 
@@ -227,7 +215,35 @@ public class MainFormController implements Initializable {
     }
 
     @FXML
-    void displayModifyProductBtn(ActionEvent event) {
+    void displayModifyProductBtn(ActionEvent event) throws IOException {
+
+        try
+        {
+            // created fxmlloader object and let it know which view to use
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("ModifyProductForm.fxml"));
+            Parent productsTableParent = loader.load();
+
+            Scene modifyProductScene = new Scene(productsTableParent);
+
+            // letting object know which controller to use
+            ModifyProductFormController ModProductController = loader.getController();
+            ModProductController.initializeProductData(productsTable.getSelectionModel().getSelectedItem());
+            // sending to modifyPartBtn didn't work because that method requires output of event but part is provided
+
+
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            window.setScene(modifyProductScene);
+            window.show();
+        }
+        catch (NullPointerException e)
+        {
+            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+            noneSelectedAlert.setTitle("Product Selection Error");
+            noneSelectedAlert.setHeaderText("No product is selected.");
+            noneSelectedAlert.showAndWait();
+        }
 
     }
 

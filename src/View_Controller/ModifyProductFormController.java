@@ -17,16 +17,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
-public class AddProductFormController implements Initializable {
+
+public class ModifyProductFormController implements Initializable {
 
     @FXML
-    private TitledPane addProductForm;
+    private TitledPane modifyProductForm;
 
     @FXML
     private TextField productIDTextField;
@@ -94,18 +94,18 @@ public class AddProductFormController implements Initializable {
     @FXML
     private Button cancelButton;
 
-    private static int productCount = 1;
+    private int productID;
 
-    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+    private int productIndex;
 
-    void searchAvailablePartsTable() {
+    private ObservableList<Part> productAssociatedParts = FXCollections.observableArrayList();
+
+    void searchPartsTable() {
         String searchQuery = searchPartTextField.getText();
         ObservableList<Part> searchResult = FXCollections.observableArrayList();
 
         try {
             int queryInt = Integer.parseInt(searchQuery);
-
-
 
             if (Inventory.lookupPart(queryInt) == null) {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
@@ -117,8 +117,6 @@ public class AddProductFormController implements Initializable {
                 searchResult.add(Inventory.lookupPart(queryInt));
                 availablePartsTable.setItems(searchResult);
             }
-
-
 
         }
         catch (NumberFormatException e) {
@@ -140,43 +138,34 @@ public class AddProductFormController implements Initializable {
 
     @FXML
     void addPartToAssociatedParts(ActionEvent event) {
+        Part selectedPart = availablePartsTable.getSelectionModel().getSelectedItem();
 
-            Part selectedPart = availablePartsTable.getSelectionModel().getSelectedItem();
+        if (availablePartsTable.getSelectionModel().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Part Selection Error");
+            alert.setHeaderText("No part is selected.");
+            alert.show();
+        }
 
-            if (availablePartsTable.getSelectionModel().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Part Selection Error");
-                alert.setHeaderText("No part is selected.");
-                alert.show();
-            }
+        else if (productAssociatedParts.contains(selectedPart)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Duplicate Part Error");
+            alert.setHeaderText("The part has already been added, can only be added once.");
+            alert.show();
+        }
+        else {
+            productAssociatedParts.add(selectedPart);
+        }
+        availablePartsTable.getSelectionModel().clearSelection();
+    }
 
-            else if (associatedParts.contains(selectedPart)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Duplicate Part Error");
-                alert.setHeaderText("The part has already been added, can only be added once.");
-                alert.show();
-            }
-            else {
-                associatedParts.add(selectedPart);
-            }
-            availablePartsTable.getSelectionModel().clearSelection();
+    @FXML
+    void modifyProductBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void addProductBtn(ActionEvent event) throws IOException {
-
-        int productID = productCount++;
-        String productName = productNameTextField.getText();
-        int productStock = Integer.parseInt(productStockTextField.getText());
-        double productPrice = Double.parseDouble(productPriceTextField.getText());
-        int productMin = Integer.parseInt(productMinTextField.getText());
-        int productMax = Integer.parseInt(productMaxTextField.getText());
-
-        Product newProduct = new Product(productID, productName, productPrice, productStock, productMin, productMax);
-        newProduct.getAllAssociatedParts().addAll(associatedParts); // use loop to use addAssociatedPartFunction?
-        Inventory.addProduct(newProduct);
-
+    void modifyProductCancelBtn(ActionEvent event) throws IOException {
 
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         Scene mainScene = new Scene(mainLoader);
@@ -185,30 +174,13 @@ public class AddProductFormController implements Initializable {
         window.setScene(mainScene);
         window.show();
 
-
-    }
-
-    @FXML
-    void addProductCancelBtn(ActionEvent event) throws IOException {
-
-//        ObservableList<Part> associatedParts = Product.getAllAssociatedParts();
-//        associatedParts.clear();
-        // associatedParts.removeAll();
-
-        Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
-        Scene mainScene = new Scene(mainLoader);
-
-        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(mainScene);
-        window.show();
     }
 
     @FXML
     void removeAssociatedPartBtn(ActionEvent event) {
-
         Part selectedPart = associatedPartsTable.getSelectionModel().getSelectedItem();
 
-        if (associatedParts.isEmpty()) {
+        if (productAssociatedParts.isEmpty()) {
             Alert notFoundAlert = new Alert(Alert.AlertType.ERROR);
             notFoundAlert.setTitle("Delete Part Error");
             notFoundAlert.setHeaderText("No part was deleted.");
@@ -222,24 +194,32 @@ public class AddProductFormController implements Initializable {
             alert.show();
         }
         else {
-            associatedParts.remove(selectedPart);
+            productAssociatedParts.remove(selectedPart);
         }
     }
 
     @FXML
     void searchAvailablePartsBtn(ActionEvent event) {
-        searchAvailablePartsTable();
+        searchPartsTable();
     }
 
     @FXML
     void searchAvailablePartsTableEnter(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER)  {
-            searchAvailablePartsTable();
+            searchPartsTable();
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initializeProductData(Product product) {
+        productID = product.getProductID();
+        productIndex = Inventory.getAllProducts().indexOf(product);
+        productAssociatedParts = product.getAllAssociatedParts();
+        productIDTextField.setText(String.valueOf(product.getProductID()));
+        productNameTextField.setText(product.getProductName());
+        productStockTextField.setText(String.valueOf(product.getProductStock()));
+        productPriceTextField.setText(String.valueOf(product.getProductPrice()));
+        productMaxTextField.setText(String.valueOf(product.getProductMax()));
+        productMinTextField.setText(String.valueOf(product.getProductMin()));
 
         availablePartsTable.setItems(Inventory.getAllParts());
         availablePartIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
@@ -262,9 +242,7 @@ public class AddProductFormController implements Initializable {
             }
         });
 
-        availablePartsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        associatedPartsTable.setItems(associatedParts);
+        associatedPartsTable.setItems(product.getAllAssociatedParts());
         associatedPartIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
         associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<>("partName"));
         associatedPartStockCol.setCellValueFactory(new PropertyValueFactory<>("partStock"));
@@ -283,7 +261,13 @@ public class AddProductFormController implements Initializable {
             }
         });
 
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+
     }
 
 }
-

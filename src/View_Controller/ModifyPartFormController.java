@@ -157,8 +157,9 @@ public class ModifyPartFormController {
         partNameTextField.setText(part.getPartName());
         partPriceTextField.setText(String.valueOf(part.getPartPrice()));
         partStockTextField.setText(String.valueOf(part.getPartStock()));
-        partMinTextField.setText(String.valueOf(part.getPartMin()));
         partMaxTextField.setText(String.valueOf(part.getPartMax()));
+        partMinTextField.setText(String.valueOf(part.getPartMin()));
+
 
         if (part instanceof InHouse) {
             inHouseSelection.setSelected(true);

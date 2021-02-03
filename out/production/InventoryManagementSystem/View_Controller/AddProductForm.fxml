@@ -38,7 +38,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="productIDTextField" disable="true" editable="false" layoutX="110.0" layoutY="70.0" prefHeight="29.0" prefWidth="128.0" promptText="Auto Gen-Disabled" />
+            <TextField fx:id="productIDTextField" disable="true" editable="false" layoutX="110.0" layoutY="70.0" prefHeight="29.0" prefWidth="128.0" text="Auto Gen-Disabled" />
             <TextField fx:id="productNameTextField" layoutX="110.0" layoutY="115.0" prefHeight="29.0" prefWidth="128.0" />
             <TextField fx:id="productStockTextField" layoutX="110.0" layoutY="160.0" prefHeight="29.0" prefWidth="128.0" />
             <TextField fx:id="productPriceTextField" layoutX="110.0" layoutY="205.0" prefHeight="29.0" prefWidth="128.0" />
@@ -60,7 +60,7 @@
             <TextField fx:id="searchPartTextField" layoutX="656.0" layoutY="26.0" onKeyPressed="#searchAvailablePartsTableEnter" />
             <Button fx:id="searchPartButton" layoutX="840.0" layoutY="26.0" mnemonicParsing="false" onAction="#searchAvailablePartsBtn" text="Search" />
             <Button fx:id="addPartButton" layoutX="767.0" layoutY="275.0" mnemonicParsing="false" onAction="#addPartToAssociatedParts" text="Add" />
-            <TableView fx:id="associatedPartsTable" layoutX="429.0" layoutY="314.0" prefHeight="200.0" prefWidth="471.0">
+            <TableView fx:id="associatedPartsTable" layoutX="421.0" layoutY="314.0" prefHeight="200.0" prefWidth="471.0">
                <columns>
                   <TableColumn fx:id="associatedPartIDCol" prefWidth="71.0" style="-fx-font-size: 16;" text="Part ID" />
                   <TableColumn fx:id="associatedPartNameCol" prefWidth="103.0" style="-fx-font-size: 16;" text="Part Name" />

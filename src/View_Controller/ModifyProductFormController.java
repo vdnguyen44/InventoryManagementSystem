@@ -100,40 +100,15 @@ public class ModifyProductFormController {
     public ObservableList<Part> copyAssociatedParts = FXCollections.observableArrayList();
 
 
+    @FXML
+    void searchAvailablePartsBtn(ActionEvent event) {
+        searchPartsTable();
+    }
 
-    void searchPartsTable() {
-        String searchQuery = searchPartTextField.getText();
-        ObservableList<Part> searchResult = FXCollections.observableArrayList();
-
-        try {
-            int queryInt = Integer.parseInt(searchQuery);
-
-            if (Inventory.lookupPart(queryInt) == null) {
-                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
-                emptyResultAlert.setTitle("Search Empty");
-                emptyResultAlert.setHeaderText("No results found.");
-                emptyResultAlert.show();
-            }
-            else {
-                searchResult.add(Inventory.lookupPart(queryInt));
-                availablePartsTable.setItems(searchResult);
-            }
-
-        }
-        catch (NumberFormatException e) {
-            availablePartsTable.setItems(Inventory.lookupPart(searchQuery));
-
-            if (Inventory.lookupPart(searchQuery).isEmpty()) {
-                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
-                emptyResultAlert.setTitle("Empty Search");
-                emptyResultAlert.setHeaderText("No results found.");
-                emptyResultAlert.show();
-            }
-        }
-        finally {
-            if (searchQuery.equals("")) {
-                availablePartsTable.setItems(Inventory.getAllParts());
-            }
+    @FXML
+    void searchAvailablePartsTableEnter(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER)  {
+            searchPartsTable();
         }
     }
 
@@ -142,23 +117,45 @@ public class ModifyProductFormController {
         Part selectedPart = availablePartsTable.getSelectionModel().getSelectedItem();
 
         if (availablePartsTable.getSelectionModel().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Part Selection Error");
-            alert.setHeaderText("No part is selected.");
-            alert.show();
+            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+            noneSelectedAlert.setTitle("Part Selection Error");
+            noneSelectedAlert.setHeaderText("No part is selected.");
+            noneSelectedAlert.show();
         }
 
         else if (copyAssociatedParts.contains(selectedPart)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Duplicate Part Error");
-            alert.setHeaderText("The part has already been added, can only be added once.");
-            alert.show();
+            Alert duplicateAlert = new Alert(Alert.AlertType.ERROR);
+            duplicateAlert.setTitle("Duplicate Part Error");
+            duplicateAlert.setHeaderText("The part has already been added, can only be added once.");
+            duplicateAlert.show();
         }
         else {
             copyAssociatedParts.add(selectedPart);
-            System.out.println(copyAssociatedParts);
+            // System.out.println(copyAssociatedParts);
         }
         availablePartsTable.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    void removeAssociatedPartBtn(ActionEvent event) {
+        Part selectedPart = associatedPartsTable.getSelectionModel().getSelectedItem();
+
+        if (copyAssociatedParts.isEmpty()) {
+            Alert emptyListAlert = new Alert(Alert.AlertType.ERROR);
+            emptyListAlert.setTitle("Delete Part Error");
+            emptyListAlert.setHeaderText("No part was deleted.");
+            emptyListAlert.show();
+        }
+
+        else if (associatedPartsTable.getSelectionModel().isEmpty()) {
+            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+            noneSelectedAlert.setTitle("Part Selection Error");
+            noneSelectedAlert.setHeaderText("No part is selected.");
+            noneSelectedAlert.show();
+        }
+        else {
+            copyAssociatedParts.remove(selectedPart);
+        }
     }
 
     @FXML
@@ -211,37 +208,39 @@ public class ModifyProductFormController {
 
     }
 
-    @FXML
-    void removeAssociatedPartBtn(ActionEvent event) {
-        Part selectedPart = associatedPartsTable.getSelectionModel().getSelectedItem();
+    void searchPartsTable() {
+        String searchQuery = searchPartTextField.getText();
+        ObservableList<Part> searchResult = FXCollections.observableArrayList();
 
-        if (copyAssociatedParts.isEmpty()) {
-            Alert notFoundAlert = new Alert(Alert.AlertType.ERROR);
-            notFoundAlert.setTitle("Delete Part Error");
-            notFoundAlert.setHeaderText("No part was deleted.");
-            notFoundAlert.show();
+        try {
+            int queryInt = Integer.parseInt(searchQuery);
+
+            if (Inventory.lookupPart(queryInt) == null) {
+                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
+                emptyResultAlert.setTitle("Search Empty");
+                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.show();
+            }
+            else {
+                searchResult.add(Inventory.lookupPart(queryInt));
+                availablePartsTable.setItems(searchResult);
+            }
+
         }
+        catch (NumberFormatException e) {
+            availablePartsTable.setItems(Inventory.lookupPart(searchQuery));
 
-        else if (associatedPartsTable.getSelectionModel().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Part Selection Error");
-            alert.setHeaderText("No part is selected.");
-            alert.show();
+            if (Inventory.lookupPart(searchQuery).isEmpty()) {
+                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
+                emptyResultAlert.setTitle("Empty Search");
+                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.show();
+            }
         }
-        else {
-            copyAssociatedParts.remove(selectedPart);
-        }
-    }
-
-    @FXML
-    void searchAvailablePartsBtn(ActionEvent event) {
-        searchPartsTable();
-    }
-
-    @FXML
-    void searchAvailablePartsTableEnter(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER)  {
-            searchPartsTable();
+        finally {
+            if (searchQuery.equals("")) {
+                availablePartsTable.setItems(Inventory.getAllParts());
+            }
         }
     }
 

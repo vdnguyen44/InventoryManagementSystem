@@ -6,12 +6,12 @@ import javafx.collections.ObservableList;
 public class Product {
 // associatedParts shouldn't be static
     private ObservableList<Part> associatedParts = FXCollections.observableArrayList();;
-    protected int productID;
-    protected String productName;
-    protected double productPrice;
-    protected int productStock;
-    protected int productMin;
-    protected int productMax;
+    private int productID;
+    private String productName;
+    private double productPrice;
+    private int productStock;
+    private int productMin;
+    private int productMax;
 
     public Product(int productID, String productName, double productPrice, int productStock, int productMin, int productMax) {
         this.productID = productID;
@@ -93,4 +93,3 @@ public class Product {
 
 }
 
-// still need addAssociatedPart, delete AssociatedPart, getAllAssociatedParts

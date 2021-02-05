@@ -92,6 +92,187 @@ public class MainFormController implements Initializable {
     private Button exitButton;
 
 
+    @FXML
+    void displayAddPartBtn(ActionEvent event) throws IOException {
+        Parent addPartFormLoader = FXMLLoader.load(getClass().getResource("AddPartForm.fxml"));
+        Scene addPartScene = new Scene(addPartFormLoader);
+
+        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        window.setScene(addPartScene);
+        window.show();
+    }
+
+    @FXML
+    void displayModifyPartBtn(ActionEvent event) throws IOException {
+        try
+        {
+            // created fxmlloader object and let it know which view to use
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("ModifyPartForm.fxml"));
+            Parent partsTableParent = loader.load();
+
+            Scene modifyPartScene = new Scene(partsTableParent);
+
+            // letting object know which controller to use
+            ModifyPartFormController ModPartController = loader.getController();
+            ModPartController.initializePartData(partsTable.getSelectionModel().getSelectedItem());
+            // sending to modifyPartBtn didn't work because that method requires output of event but part is provided
+
+
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            window.setScene(modifyPartScene);
+            window.show();
+        }
+        catch (NullPointerException e)
+        {
+            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+            noneSelectedAlert.setTitle("Part Selection Error");
+            noneSelectedAlert.setHeaderText("No part is selected.");
+            noneSelectedAlert.show();
+        }
+
+    }
+
+    @FXML
+    void deletePartBtn(ActionEvent event) {
+
+            Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
+
+//          if (Inventory.getAllParts().contains(selectedPart)) {
+//              Inventory.deletePart(selectedPart);
+//          }
+//          else {
+//              Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+//                noneSelectedAlert.setTitle("Part Selection Error");
+//                noneSelectedAlert.setHeaderText("No part is selected.");
+//                noneSelectedAlert.show();
+//          }
+
+
+//        if (partsTable.getSelectionModel().isEmpty()) {
+//                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+//                noneSelectedAlert.setTitle("Part Selection Error");
+//                noneSelectedAlert.setHeaderText("No part is selected.");
+//                noneSelectedAlert.show();
+//        }
+//        else  {
+//            Inventory.deletePart(selectedPart);
+//        }
+
+        if (!Inventory.deletePart(selectedPart)) {
+                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+                noneSelectedAlert.setTitle("Part Deletion Error");
+                noneSelectedAlert.setHeaderText("No part was selected, nothing was deleted.");
+                noneSelectedAlert.show();
+        }
+        else {
+            Inventory.deletePart(selectedPart);
+        }
+
+    }
+
+    @FXML
+    void searchPartsTableBtn(ActionEvent event) {
+        // Part = type of class being scanned in list, part = element variable, after the colons is the list, getAllParts returns that list
+//        for (Part part : Inventory.getAllParts()) {
+//
+//        }
+//        // too specific, come up with method to check for whether partID or partName is being searched, 36:49
+//        int searchQuery = Integer.parseInt(searchPartTextField.getText());
+//        ObservableList<Part> searchResult = FXCollections.observableArrayList();
+//        searchResult.add(Inventory.lookUpPartByID(searchQuery));
+//        partsTable.setItems(searchResult);
+
+        searchPartsTable();
+    }
+
+    @FXML
+    void searchPartsTableEnter (KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER)  {
+            searchPartsTable();
+        }
+    }
+
+    @FXML
+    void displayAddProductBtn(ActionEvent event) throws IOException {
+
+        Parent addProductFormLoader = FXMLLoader.load(getClass().getResource("AddProductForm.fxml"));
+        Scene addProductScene = new Scene(addProductFormLoader);
+
+        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        window.setScene(addProductScene);
+        window.show();
+
+    }
+
+    @FXML
+    void displayModifyProductBtn(ActionEvent event) throws IOException {
+
+        try
+        {
+            // created fxmlloader object and let it know which view to use
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("ModifyProductForm.fxml"));
+            Parent productsTableParent = loader.load();
+
+            Scene modifyProductScene = new Scene(productsTableParent);
+
+            // letting object know which controller to use
+            ModifyProductFormController ModProductController = loader.getController();
+            ModProductController.initializeProductData(productsTable.getSelectionModel().getSelectedItem());
+            // sending to modifyPartBtn didn't work because that method requires output of event but part is provided
+
+
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            window.setScene(modifyProductScene);
+            window.show();
+        }
+        catch (NullPointerException e)
+        {
+            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+            noneSelectedAlert.setTitle("Product Selection Error");
+            noneSelectedAlert.setHeaderText("No product is selected.");
+            noneSelectedAlert.show();
+        }
+
+    }
+
+    @FXML
+    void deleteProductBtn(ActionEvent event) {
+            Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
+        if (!Inventory.deleteProduct(selectedProduct)) {
+            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+            noneSelectedAlert.setTitle("Product Deletion Error");
+            noneSelectedAlert.setHeaderText("No product is selected, nothing was deleted.");
+            noneSelectedAlert.show();
+        }
+        else {
+            Inventory.deleteProduct(selectedProduct);
+        }
+
+    }
+
+    @FXML
+    void searchProductsTable(ActionEvent event) {
+        searchProductsTable();
+    }
+
+    @FXML
+    void searchProductsTableEnter(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            searchProductsTable();
+        }
+    }
+
+    @FXML
+    void exitBtn(ActionEvent event) {
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        stage.close();
+
+    }
+
     void searchPartsTable() {
         String searchQuery = searchPartTextField.getText();
         ObservableList<Part> searchResult = FXCollections.observableArrayList();
@@ -164,196 +345,13 @@ public class MainFormController implements Initializable {
         }
     }
 
-    @FXML
-    void deletePartBtn(ActionEvent event) {
-
-            Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
-
-//          if (Inventory.getAllParts().contains(selectedPart)) {
-//              Inventory.deletePart(selectedPart);
-//          }
-//          else {
-//              Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-//                noneSelectedAlert.setTitle("Part Selection Error");
-//                noneSelectedAlert.setHeaderText("No part is selected.");
-//                noneSelectedAlert.show();
-//          }
-
-
-//        if (partsTable.getSelectionModel().isEmpty()) {
-//                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-//                noneSelectedAlert.setTitle("Part Selection Error");
-//                noneSelectedAlert.setHeaderText("No part is selected.");
-//                noneSelectedAlert.show();
-//        }
-//        else  {
-//            Inventory.deletePart(selectedPart);
-//        }
-
-        if (!Inventory.deletePart(selectedPart)) {
-                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-                noneSelectedAlert.setTitle("Part Selection Error");
-                noneSelectedAlert.setHeaderText("No part is selected.");
-                noneSelectedAlert.show();
-        }
-        else {
-            Inventory.deletePart(selectedPart);
-        }
-
-    }
-
-    @FXML
-    void deleteProductBtn(ActionEvent event) {
-            Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
-        if (!Inventory.deleteProduct(selectedProduct)) {
-            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-            noneSelectedAlert.setTitle("Product Selection Error");
-            noneSelectedAlert.setHeaderText("No product is selected.");
-            noneSelectedAlert.show();
-        }
-        else {
-            Inventory.deleteProduct(selectedProduct);
-        }
-
-    }
-
-
-
-    @FXML
-    void displayAddPartBtn(ActionEvent event) throws IOException {
-        Parent addPartFormLoader = FXMLLoader.load(getClass().getResource("AddPartForm.fxml"));
-        Scene addPartScene = new Scene(addPartFormLoader);
-
-        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(addPartScene);
-        window.show();
-    }
-
-    @FXML
-    void displayAddProductBtn(ActionEvent event) throws IOException {
-
-        Parent addProductFormLoader = FXMLLoader.load(getClass().getResource("AddProductForm.fxml"));
-        Scene addProductScene = new Scene(addProductFormLoader);
-
-        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(addProductScene);
-        window.show();
-
-    }
-
-    @FXML
-    void displayModifyPartBtn(ActionEvent event) throws IOException {
-        try
-        {
-            // created fxmlloader object and let it know which view to use
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("ModifyPartForm.fxml"));
-            Parent partsTableParent = loader.load();
-
-            Scene modifyPartScene = new Scene(partsTableParent);
-
-            // letting object know which controller to use
-            ModifyPartFormController ModPartController = loader.getController();
-            ModPartController.initializePartData(partsTable.getSelectionModel().getSelectedItem());
-            // sending to modifyPartBtn didn't work because that method requires output of event but part is provided
-
-
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            window.setScene(modifyPartScene);
-            window.show();
-        }
-        catch (NullPointerException e)
-        {
-            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-            noneSelectedAlert.setTitle("Part Selection Error");
-            noneSelectedAlert.setHeaderText("No part is selected.");
-            noneSelectedAlert.showAndWait();
-        }
-
-    }
-
-    @FXML
-    void displayModifyProductBtn(ActionEvent event) throws IOException {
-
-        try
-        {
-            // created fxmlloader object and let it know which view to use
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("ModifyProductForm.fxml"));
-            Parent productsTableParent = loader.load();
-
-            Scene modifyProductScene = new Scene(productsTableParent);
-
-            // letting object know which controller to use
-            ModifyProductFormController ModProductController = loader.getController();
-            ModProductController.initializeProductData(productsTable.getSelectionModel().getSelectedItem());
-            // sending to modifyPartBtn didn't work because that method requires output of event but part is provided
-
-
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            window.setScene(modifyProductScene);
-            window.show();
-        }
-        catch (NullPointerException e)
-        {
-            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-            noneSelectedAlert.setTitle("Product Selection Error");
-            noneSelectedAlert.setHeaderText("No product is selected.");
-            noneSelectedAlert.showAndWait();
-        }
-
-    }
-
-    @FXML
-    void exitBtn(ActionEvent event) {
-        Stage stage = (Stage) exitButton.getScene().getWindow();
-        stage.close();
-
-    }
-
-    @FXML
-    void searchPartsTableBtn(ActionEvent event) {
-    // Part = type of class being scanned in list, part = element variable, after the colons is the list, getAllParts returns that list
-//        for (Part part : Inventory.getAllParts()) {
-//
-//        }
-//        // too specific, come up with method to check for whether partID or partName is being searched, 36:49
-//        int searchQuery = Integer.parseInt(searchPartTextField.getText());
-//        ObservableList<Part> searchResult = FXCollections.observableArrayList();
-//        searchResult.add(Inventory.lookUpPartByID(searchQuery));
-//        partsTable.setItems(searchResult);
-
-        searchPartsTable();
-    }
-
-    @FXML
-    void searchPartsTableEnter (KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER)  {
-            searchPartsTable();
-        }
-    }
-
-    @FXML
-    void searchProductsTable(ActionEvent event) {
-        searchProductsTable();
-    }
-
-    @FXML
-    void searchProductsTableEnter(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
-            searchProductsTable();
-        }
-    }
-
-
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //this is the first method called anytime this controller is instantiated
         //at first program wouldn't run because "implements Initializable" wasn't specified at beginning of class
         // this code initializes the table and displays all available parts when main screen is loaded
+
+
         partsTable.setItems(Inventory.getAllParts());
 
         partIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));

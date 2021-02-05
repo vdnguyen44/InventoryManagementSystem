@@ -101,9 +101,6 @@ public class ModifyProductFormController {
 
 
 
-
-
-
     void searchPartsTable() {
         String searchQuery = searchPartTextField.getText();
         ObservableList<Part> searchResult = FXCollections.observableArrayList();

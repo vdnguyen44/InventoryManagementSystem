@@ -66,6 +66,20 @@ public class AddPartFormController {
 
     private static int partCount = 1;
 
+
+    @FXML
+    void inHouseSelected(ActionEvent event) {
+
+        mIDcompanyNameLabel.setText("Machine ID");
+
+    }
+
+    @FXML
+    void outSourcedSelected(ActionEvent event) {
+
+        mIDcompanyNameLabel.setText("Company Name");
+    }
+
     @FXML
     void addPartBtn(ActionEvent event) throws IOException {
 
@@ -95,23 +109,8 @@ public class AddPartFormController {
         window.setScene(mainScene);
         window.show();
 
-
-
-
     }
 
-    @FXML
-    void inHouseSelected(ActionEvent event) {
-
-        mIDcompanyNameLabel.setText("Machine ID");
-
-    }
-
-    @FXML
-    void outSourcedSelected(ActionEvent event) {
-
-        mIDcompanyNameLabel.setText("Company Name");
-    }
 
     @FXML
     void addPartCancelBtn(ActionEvent event) throws IOException {

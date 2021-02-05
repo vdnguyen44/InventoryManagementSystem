@@ -17,7 +17,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -98,14 +97,15 @@ public class AddProductFormController implements Initializable {
 
     private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
+
+
+
     void searchAvailablePartsTable() {
         String searchQuery = searchPartTextField.getText();
         ObservableList<Part> searchResult = FXCollections.observableArrayList();
 
         try {
             int queryInt = Integer.parseInt(searchQuery);
-
-
 
             if (Inventory.lookupPart(queryInt) == null) {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
@@ -117,9 +117,6 @@ public class AddProductFormController implements Initializable {
                 searchResult.add(Inventory.lookupPart(queryInt));
                 availablePartsTable.setItems(searchResult);
             }
-
-
-
         }
         catch (NumberFormatException e) {
             availablePartsTable.setItems(Inventory.lookupPart(searchQuery));
@@ -149,7 +146,6 @@ public class AddProductFormController implements Initializable {
                 alert.setHeaderText("No part is selected.");
                 alert.show();
             }
-
             else if (associatedParts.contains(selectedPart)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Duplicate Part Error");

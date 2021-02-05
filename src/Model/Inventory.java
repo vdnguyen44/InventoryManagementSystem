@@ -17,8 +17,6 @@ public class Inventory {
         allProducts.add(newProduct);
     }
 
-
-
     public static Part lookupPart(int partID) {
         for (Part part : allParts) {
             if (partID == part.getPartID()) {

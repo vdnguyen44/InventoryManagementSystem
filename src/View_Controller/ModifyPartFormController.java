@@ -4,7 +4,6 @@ import Model.InHouse;
 import Model.Inventory;
 import Model.Outsourced;
 import Model.Part;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,11 +12,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-
-import static Model.Inventory.getAllParts;
 import static Model.Inventory.updatePart;
+
 
 public class ModifyPartFormController {
 

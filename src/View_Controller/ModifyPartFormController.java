@@ -63,7 +63,6 @@ public class ModifyPartFormController {
     @FXML
     private Button cancelButton;
 
-    @FXML
     private int partID;
 
     private int partIndex;

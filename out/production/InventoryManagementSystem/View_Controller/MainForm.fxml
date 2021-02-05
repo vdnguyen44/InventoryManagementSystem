@@ -55,7 +55,7 @@
                   <Button fx:id="addProductButton" layoutX="46.0" layoutY="286.0" mnemonicParsing="false" onAction="#displayAddProductBtn" text="Add" />
                   <Button fx:id="modifyProductButton" layoutX="356.0" layoutY="286.0" mnemonicParsing="false" onAction="#displayModifyProductBtn" text="Modify" />
                   <Button fx:id="deleteProductButton" layoutX="465.0" layoutY="286.0" mnemonicParsing="false" onAction="#deleteProductBtn" text="Delete" />
-                  <TextField fx:id="searchProductTextField" layoutX="309.0" layoutY="29.0" />
+                  <TextField fx:id="searchProductTextField" layoutX="309.0" layoutY="29.0" onKeyPressed="#searchProductsTableEnter" />
                   <Button fx:id="searchProductButton" layoutX="494.0" layoutY="29.0" mnemonicParsing="false" onAction="#searchProductsTable" text="Search" />
                </children>
             </AnchorPane>

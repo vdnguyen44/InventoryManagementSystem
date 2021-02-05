@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,12 +17,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.net.URL;
 import java.text.NumberFormat;
-import java.util.ResourceBundle;
 
 
-public class ModifyProductFormController implements Initializable {
+public class ModifyProductFormController {
 
     @FXML
     private TitledPane modifyProductForm;
@@ -98,7 +95,14 @@ public class ModifyProductFormController implements Initializable {
 
     private int productIndex;
 
-    private ObservableList<Part> productAssociatedParts = FXCollections.observableArrayList();
+    public ObservableList<Part> productAssociatedParts;
+
+    public ObservableList<Part> copyAssociatedParts = FXCollections.observableArrayList();
+
+
+
+
+
 
     void searchPartsTable() {
         String searchQuery = searchPartTextField.getText();
@@ -147,25 +151,59 @@ public class ModifyProductFormController implements Initializable {
             alert.show();
         }
 
-        else if (productAssociatedParts.contains(selectedPart)) {
+        else if (copyAssociatedParts.contains(selectedPart)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Duplicate Part Error");
             alert.setHeaderText("The part has already been added, can only be added once.");
             alert.show();
         }
         else {
-            productAssociatedParts.add(selectedPart);
+            copyAssociatedParts.add(selectedPart);
+            System.out.println(copyAssociatedParts);
         }
         availablePartsTable.getSelectionModel().clearSelection();
     }
 
     @FXML
-    void modifyProductBtn(ActionEvent event) {
+    void modifyProductBtn(ActionEvent event) throws IOException {
+        //Store a copy of the original associated part list
+        // copyAssociatedParts.addAll(productAssociatedParts);
+        // productAssociatedParts.addAll(copyAssociatedParts);
 
+
+        String productName = productNameTextField.getText();
+        int productStock = Integer.parseInt(productStockTextField.getText());
+        double productPrice = Double.parseDouble(productPriceTextField.getText());
+        int productMin = Integer.parseInt(productMinTextField.getText());
+        int productMax = Integer.parseInt(productMaxTextField.getText());
+
+        Product updatedProduct = Inventory.lookupProduct(productID);
+        assert updatedProduct != null;
+        updatedProduct.setProductName(productName);
+        updatedProduct.setProductStock(productStock);
+        updatedProduct.setProductPrice(productPrice);
+        updatedProduct.setProductMin(productMin);
+        updatedProduct.setProductMax(productMax);
+        updatedProduct.getAllAssociatedParts().clear();
+        updatedProduct.getAllAssociatedParts().addAll(copyAssociatedParts);
+        Inventory.updateProduct(productIndex, updatedProduct);
+
+
+        Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+        Scene mainScene = new Scene(mainLoader);
+
+        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        window.setScene(mainScene);
+        window.show();
+
+//        Product updatedProduct = new Product(productID, productName, productPrice, productStock, productMin, productMax);
+//        Inventory.updateProduct(productIndex, updatedProduct);
     }
 
     @FXML
     void modifyProductCancelBtn(ActionEvent event) throws IOException {
+        //Remove all changes to the copy part list
+        copyAssociatedParts.clear();
 
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         Scene mainScene = new Scene(mainLoader);
@@ -180,7 +218,7 @@ public class ModifyProductFormController implements Initializable {
     void removeAssociatedPartBtn(ActionEvent event) {
         Part selectedPart = associatedPartsTable.getSelectionModel().getSelectedItem();
 
-        if (productAssociatedParts.isEmpty()) {
+        if (copyAssociatedParts.isEmpty()) {
             Alert notFoundAlert = new Alert(Alert.AlertType.ERROR);
             notFoundAlert.setTitle("Delete Part Error");
             notFoundAlert.setHeaderText("No part was deleted.");
@@ -194,7 +232,7 @@ public class ModifyProductFormController implements Initializable {
             alert.show();
         }
         else {
-            productAssociatedParts.remove(selectedPart);
+            copyAssociatedParts.remove(selectedPart);
         }
     }
 
@@ -211,9 +249,11 @@ public class ModifyProductFormController implements Initializable {
     }
 
     public void initializeProductData(Product product) {
+
         productID = product.getProductID();
         productIndex = Inventory.getAllProducts().indexOf(product);
         productAssociatedParts = product.getAllAssociatedParts();
+        copyAssociatedParts.addAll(productAssociatedParts);
         productIDTextField.setText(String.valueOf(product.getProductID()));
         productNameTextField.setText(product.getProductName());
         productStockTextField.setText(String.valueOf(product.getProductStock()));
@@ -242,7 +282,7 @@ public class ModifyProductFormController implements Initializable {
             }
         });
 
-        associatedPartsTable.setItems(product.getAllAssociatedParts());
+        associatedPartsTable.setItems(copyAssociatedParts);
         associatedPartIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
         associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<>("partName"));
         associatedPartStockCol.setCellValueFactory(new PropertyValueFactory<>("partStock"));
@@ -264,10 +304,6 @@ public class ModifyProductFormController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
 
-
-    }
 
 }

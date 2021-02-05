@@ -75,13 +75,15 @@ public class Product {
     }
 
     public boolean deleteAssociatedPart(Part part) {
-        for (Part currentPart: associatedParts) {
-            if (currentPart == part) {
-                associatedParts.remove(part);
-                return true;
-            }
-        }
-        return false;
+//        for (Part currentPart: associatedParts) {
+//            if (currentPart == part) {
+//                associatedParts.remove(part);
+//                return true;
+//            }
+//        }
+//        return false;
+
+        return associatedParts.remove(part);
     }
 
     public ObservableList<Part> getAllAssociatedParts() {

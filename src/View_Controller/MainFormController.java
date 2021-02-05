@@ -2,7 +2,6 @@ package View_Controller;
 import Model.Inventory;
 import Model.Part;
 import Model.Product;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,9 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
@@ -104,7 +101,7 @@ public class MainFormController implements Initializable {
 
             if (Inventory.lookupPart(queryInt) == null) {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
-                emptyResultAlert.setTitle("Search Empty");
+                emptyResultAlert.setTitle("Empty Search");
                 emptyResultAlert.setHeaderText("No results found.");
                 emptyResultAlert.show();
             }
@@ -131,34 +128,96 @@ public class MainFormController implements Initializable {
         }
     }
 
+    void searchProductsTable() {
+        String searchQuery = searchProductTextField.getText();
+        ObservableList<Product> searchResult = FXCollections.observableArrayList();
+
+        try {
+            int queryInt = Integer.parseInt(searchQuery);
+
+            if (Inventory.lookupProduct(queryInt) == null) {
+                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
+                emptyResultAlert.setTitle("Empty Search");
+                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.show();
+            }
+            else {
+                searchResult.add(Inventory.lookupProduct(queryInt));
+                productsTable.setItems(searchResult);
+            }
+
+        }
+        catch (NumberFormatException e) {
+            productsTable.setItems(Inventory.lookupProduct(searchQuery));
+
+            if (Inventory.lookupProduct(searchQuery).isEmpty()) {
+                Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
+                emptyResultAlert.setTitle("Empty Search");
+                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.show();
+            }
+        }
+        finally {
+            if (searchQuery.equals("")) {
+                productsTable.setItems(Inventory.getAllProducts());
+            }
+        }
+    }
+
     @FXML
     void deletePartBtn(ActionEvent event) {
 
             Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
 
-        if (Inventory.getAllParts().isEmpty()) {
-            Alert notFoundAlert = new Alert(Alert.AlertType.ERROR);
-            notFoundAlert.setTitle("Delete Part Error");
-            notFoundAlert.setHeaderText("No part was deleted.");
-            notFoundAlert.show();
-        }
+//          if (Inventory.getAllParts().contains(selectedPart)) {
+//              Inventory.deletePart(selectedPart);
+//          }
+//          else {
+//              Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+//                noneSelectedAlert.setTitle("Part Selection Error");
+//                noneSelectedAlert.setHeaderText("No part is selected.");
+//                noneSelectedAlert.show();
+//          }
 
-        else if (partsTable.getSelectionModel().isEmpty()) {
+
+//        if (partsTable.getSelectionModel().isEmpty()) {
+//                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+//                noneSelectedAlert.setTitle("Part Selection Error");
+//                noneSelectedAlert.setHeaderText("No part is selected.");
+//                noneSelectedAlert.show();
+//        }
+//        else  {
+//            Inventory.deletePart(selectedPart);
+//        }
+
+        if (!Inventory.deletePart(selectedPart)) {
                 Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
                 noneSelectedAlert.setTitle("Part Selection Error");
                 noneSelectedAlert.setHeaderText("No part is selected.");
                 noneSelectedAlert.show();
         }
         else {
-                Inventory.deletePart(selectedPart);
+            Inventory.deletePart(selectedPart);
         }
 
     }
 
     @FXML
     void deleteProductBtn(ActionEvent event) {
+            Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
+        if (!Inventory.deleteProduct(selectedProduct)) {
+            Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+            noneSelectedAlert.setTitle("Product Selection Error");
+            noneSelectedAlert.setHeaderText("No product is selected.");
+            noneSelectedAlert.show();
+        }
+        else {
+            Inventory.deleteProduct(selectedProduct);
+        }
 
     }
+
+
 
     @FXML
     void displayAddPartBtn(ActionEvent event) throws IOException {
@@ -278,7 +337,14 @@ public class MainFormController implements Initializable {
 
     @FXML
     void searchProductsTable(ActionEvent event) {
+        searchProductsTable();
+    }
 
+    @FXML
+    void searchProductsTableEnter(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            searchProductsTable();
+        }
     }
 
 

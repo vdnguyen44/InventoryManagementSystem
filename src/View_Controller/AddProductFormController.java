@@ -174,7 +174,10 @@ public class AddProductFormController implements Initializable {
         int productMax = Integer.parseInt(productMaxTextField.getText());
 
         Product newProduct = new Product(productID, productName, productPrice, productStock, productMin, productMax);
-        newProduct.getAllAssociatedParts().addAll(associatedParts); // use loop to use addAssociatedPartFunction?
+        // newProduct.getAllAssociatedParts().addAll(associatedParts); // use loop to use addAssociatedPartFunction?
+        for (Part currentPart : associatedParts) {
+            newProduct.addAssociatedPart(currentPart);
+        }
         Inventory.addProduct(newProduct);
 
 

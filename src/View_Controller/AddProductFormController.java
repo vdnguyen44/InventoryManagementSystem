@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -170,20 +171,42 @@ public class AddProductFormController implements Initializable {
     @FXML
     void addProductBtn(ActionEvent event) throws IOException {
 
-        int productID = productCount++;
+        int productID = productCount;
         String productName = productNameTextField.getText();
-        int productStock = Integer.parseInt(productStockTextField.getText());
-        double productPrice = Double.parseDouble(productPriceTextField.getText());
-        int productMin = Integer.parseInt(productMinTextField.getText());
-        int productMax = Integer.parseInt(productMaxTextField.getText());
+        String productStock = productStockTextField.getText();
+        String productPrice = productPriceTextField.getText();
+        String productMin = productMinTextField.getText();
+        String productMax = productMaxTextField.getText();
+        String errorMessage = "Product input is invalid. Please fix the following errors: \n";
 
-        Product newProduct = new Product(productID, productName, productPrice, productStock, productMin, productMax);
-        // newProduct.getAllAssociatedParts().addAll(associatedParts); // use loop to use addAssociatedPartFunction?
-        for (Part currentPart : associatedParts) {
-            newProduct.addAssociatedPart(currentPart);
+        List<String> productErrors = Product.productValidationCheck(productName, productPrice, productStock, productMin, productMax);
+
+        for (String error : productErrors) {
+            errorMessage = errorMessage + error + "\n";
         }
-        Inventory.addProduct(newProduct);
 
+        if (productErrors.size() > 0) {
+            Alert productErrorAlert = new Alert(Alert.AlertType.ERROR);
+            productErrorAlert.setTitle("");
+            productErrorAlert.setHeaderText("Product Validation Error");
+            productErrorAlert.setContentText(errorMessage);
+            productErrorAlert.showAndWait();
+            return;
+        }
+        else {
+            double productPriceParsed = Double.parseDouble(productPrice);
+            int productStockParsed = Integer.parseInt(productStock);
+            int productMinParsed = Integer.parseInt(productMin);
+            int productMaxParsed = Integer.parseInt(productMax);
+
+            Product newProduct = new Product(productID, productName, productPriceParsed, productStockParsed, productMinParsed, productMaxParsed);
+
+            for (Part currentPart : associatedParts) {
+                newProduct.addAssociatedPart(currentPart);
+            }
+            Inventory.addProduct(newProduct);
+            productCount++;
+        }
 
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         Scene mainScene = new Scene(mainLoader);

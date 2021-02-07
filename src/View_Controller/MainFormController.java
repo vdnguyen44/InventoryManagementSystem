@@ -128,8 +128,9 @@ public class MainFormController implements Initializable {
         catch (NullPointerException e)
         {
             Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-            noneSelectedAlert.setTitle("Part Selection Error");
-            noneSelectedAlert.setHeaderText("No part is selected.");
+            noneSelectedAlert.setTitle("");
+            noneSelectedAlert.setHeaderText("Part Selection Error");
+            noneSelectedAlert.setContentText("No part is selected.");
             noneSelectedAlert.show();
         }
 
@@ -151,14 +152,16 @@ public class MainFormController implements Initializable {
 
         if (partsTable.getSelectionModel().isEmpty()) {
                 Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-                noneSelectedAlert.setTitle("Part Selection Error");
-                noneSelectedAlert.setHeaderText("No part is selected.");
+                noneSelectedAlert.setTitle("");
+                noneSelectedAlert.setHeaderText("Part Selection Error");
+                noneSelectedAlert.setContentText("No part is selected.");
                 noneSelectedAlert.show();
         }
         else  {
             Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            deleteAlert.setTitle("Deletion Confirmation");
-            deleteAlert.setHeaderText("Are you sure you want to delete this part?");
+            deleteAlert.setTitle("");
+            deleteAlert.setHeaderText("Deletion Confirmation");
+            deleteAlert.setContentText("Are you sure you want to delete this part?");
             Optional<ButtonType> result = deleteAlert.showAndWait();
 
 
@@ -245,8 +248,9 @@ public class MainFormController implements Initializable {
         catch (NullPointerException e)
         {
             Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-            noneSelectedAlert.setTitle("Product Selection Error");
-            noneSelectedAlert.setHeaderText("No product is selected.");
+            noneSelectedAlert.setTitle("");
+            noneSelectedAlert.setHeaderText("Product Selection Error");
+            noneSelectedAlert.setContentText("No product is selected.");
             noneSelectedAlert.show();
         }
 
@@ -258,14 +262,16 @@ public class MainFormController implements Initializable {
 
         if (productsTable.getSelectionModel().isEmpty()) {
             Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-            noneSelectedAlert.setTitle("Product Selection Error");
-            noneSelectedAlert.setHeaderText("No product is selected.");
+            noneSelectedAlert.setTitle("");
+            noneSelectedAlert.setHeaderText("Product Selection Error");
+            noneSelectedAlert.setContentText("No product is selected.");
             noneSelectedAlert.show();
         }
         else  {
             Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            deleteAlert.setTitle("Deletion Confirmation");
-            deleteAlert.setHeaderText("Are you sure you want to delete this product?");
+            deleteAlert.setTitle("");
+            deleteAlert.setHeaderText("Deletion Confirmation");
+            deleteAlert.setContentText("Are you sure you want to delete this product?");
             Optional<ButtonType> result = deleteAlert.showAndWait();
 
 
@@ -275,8 +281,9 @@ public class MainFormController implements Initializable {
                 }
                 else {
                     Alert nonemptyProductAlert = new Alert(Alert.AlertType.ERROR);
-                    nonemptyProductAlert.setTitle("Nonempty Product");
-                    nonemptyProductAlert.setHeaderText("Products associated with a part cannot be deleted. Please remove the part and try again.");
+                    nonemptyProductAlert.setTitle("");
+                    nonemptyProductAlert.setHeaderText("Product has associated parts.");
+                    nonemptyProductAlert.setContentText("Products associated with a part cannot be deleted. Please remove the part and try again.");
                     nonemptyProductAlert.show();
                 }
             }
@@ -314,8 +321,9 @@ public class MainFormController implements Initializable {
 
             if (Inventory.lookupPart(queryInt) == null) {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
-                emptyResultAlert.setTitle("Empty Search");
-                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.setTitle("");
+                emptyResultAlert.setHeaderText("Empty Search");
+                emptyResultAlert.setContentText("No results found.");
                 emptyResultAlert.show();
             }
             else {
@@ -329,8 +337,9 @@ public class MainFormController implements Initializable {
 
             if (Inventory.lookupPart(searchQuery).isEmpty()) {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
-                emptyResultAlert.setTitle("Empty Search");
-                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.setTitle("");
+                emptyResultAlert.setHeaderText("Empty Search");
+                emptyResultAlert.setContentText("No results found.");
                 emptyResultAlert.show();
             }
         }
@@ -350,8 +359,9 @@ public class MainFormController implements Initializable {
 
             if (Inventory.lookupProduct(queryInt) == null) {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
-                emptyResultAlert.setTitle("Empty Search");
-                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.setTitle("");
+                emptyResultAlert.setHeaderText("Empty Search");
+                emptyResultAlert.setContentText("No results found.");
                 emptyResultAlert.show();
             }
             else {
@@ -365,8 +375,9 @@ public class MainFormController implements Initializable {
 
             if (Inventory.lookupProduct(searchQuery).isEmpty()) {
                 Alert emptyResultAlert = new Alert(Alert.AlertType.ERROR);
-                emptyResultAlert.setTitle("Empty Search");
-                emptyResultAlert.setHeaderText("No results found.");
+                emptyResultAlert.setTitle("");
+                emptyResultAlert.setHeaderText("Empty Search");
+                emptyResultAlert.setContentText("No results found.");
                 emptyResultAlert.show();
             }
         }

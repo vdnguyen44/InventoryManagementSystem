@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.List;
+
 import static Model.Inventory.updatePart;
 
 
@@ -82,44 +84,75 @@ public class ModifyPartFormController {
     void modifyPartBtn(ActionEvent event) throws IOException {
 
         String partName = partNameTextField.getText();
-        int partStock = Integer.parseInt(partStockTextField.getText());
-        double partPrice = Double.parseDouble(partPriceTextField.getText());
-        int partMin = Integer.parseInt(partMinTextField.getText());
-        int partMax = Integer.parseInt(partMaxTextField.getText());
+        String partStock = partStockTextField.getText();
+        String partPrice = partPriceTextField.getText();
+        String partMin = partMinTextField.getText();
+        String partMax = partMaxTextField.getText();
         String mIDcompanyName = mIDcompanyNameTextField.getText();
+        int machineID = 0;
+        String errorMessage = "Part input is invalid. Please fix the following errors: \n";
 
-        if (inHouseSelection.isSelected()) {
+        List<String> partErrors = Part.partValidationCheck(partName, partPrice, partStock, partMin, partMax, mIDcompanyName);
 
-            if (Inventory.lookupPart(partID) instanceof InHouse) {
-                InHouse updatedPart = (InHouse) Inventory.lookupPart(partID);
-                assert updatedPart != null;
-                updatedPart.setPartName(partName);
-                updatedPart.setPartPrice(partPrice);
-                updatedPart.setPartStock(partStock);
-                updatedPart.setPartMin(partMin);
-                updatedPart.setPartMax(partMax);
-                updatedPart.setMachineID(Integer.parseInt(mIDcompanyName));
+        if (inHouseSelection.isSelected() && !mIDcompanyName.isEmpty()) {
+            try {
+                machineID = Integer.parseInt(mIDcompanyName);
             }
-            else {
-                InHouse updatedPart = new InHouse (partID, partName, partPrice, partStock, partMin, partMax, Integer.parseInt(mIDcompanyName));
-                updatePart(partIndex, updatedPart);
+            catch (NumberFormatException e) {
+                partErrors.add("The Machine ID entered is invalid.");
             }
         }
-        else if (outSourcedSelection.isSelected()) {
 
-            if (Inventory.lookupPart(partID) instanceof Outsourced) {
-                Outsourced updatedPart = (Outsourced) Inventory.lookupPart(partID);
-                assert updatedPart != null;
-                updatedPart.setPartName(partName);
-                updatedPart.setPartPrice(partPrice);
-                updatedPart.setPartStock(partStock);
-                updatedPart.setPartMin(partMin);
-                updatedPart.setPartMin(partMax);
-                updatedPart.setCompanyName(mIDcompanyName);
-            }
-            else {
-                Outsourced updatedPart = new Outsourced(partID, partName, partPrice, partStock, partMin, partMax, mIDcompanyName);
-                updatePart(partIndex, updatedPart);
+        for (String error : partErrors) {
+            errorMessage = errorMessage + error + "\n";
+        }
+
+        if (partErrors.size() > 0) {
+            Alert partErrorAlert = new Alert(Alert.AlertType.ERROR);
+            partErrorAlert.setTitle("");
+            partErrorAlert.setHeaderText("Part Validation Error");
+            partErrorAlert.setContentText(errorMessage);
+            partErrorAlert.showAndWait();
+            return;
+        }
+        else {
+            double partPriceParsed = Double.parseDouble(partPrice);
+            int partStockParsed = Integer.parseInt(partStock);
+            int partMinParsed = Integer.parseInt(partMin);
+            int partMaxParsed = Integer.parseInt(partMax);
+
+
+            if (inHouseSelection.isSelected()) {
+
+                if (Inventory.lookupPart(partID) instanceof InHouse) {
+                    InHouse updatedPart = (InHouse) Inventory.lookupPart(partID);
+                    assert updatedPart != null;
+                    updatedPart.setPartName(partName);
+                    updatedPart.setPartPrice(partPriceParsed);
+                    updatedPart.setPartStock(partStockParsed);
+                    updatedPart.setPartMin(partMinParsed);
+                    updatedPart.setPartMax(partMaxParsed);
+                    updatedPart.setMachineID(machineID);
+                } else {
+                    InHouse updatedPart = new InHouse(partID, partName, partPriceParsed, partStockParsed, partMinParsed, partMaxParsed, machineID);
+                    updatePart(partIndex, updatedPart);
+                }
+            } else if (outSourcedSelection.isSelected()) {
+                String companyName = mIDcompanyNameTextField.getText();
+
+                if (Inventory.lookupPart(partID) instanceof Outsourced) {
+                    Outsourced updatedPart = (Outsourced) Inventory.lookupPart(partID);
+                    assert updatedPart != null;
+                    updatedPart.setPartName(partName);
+                    updatedPart.setPartPrice(partPriceParsed);
+                    updatedPart.setPartStock(partStockParsed);
+                    updatedPart.setPartMin(partMinParsed);
+                    updatedPart.setPartMin(partMaxParsed);
+                    updatedPart.setCompanyName(companyName);
+                } else {
+                    Outsourced updatedPart = new Outsourced(partID, partName, partPriceParsed, partStockParsed, partMinParsed, partMaxParsed, companyName);
+                    updatePart(partIndex, updatedPart);
+                }
             }
         }
 

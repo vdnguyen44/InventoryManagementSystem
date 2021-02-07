@@ -18,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -175,21 +176,43 @@ public class ModifyProductFormController {
 
 
         String productName = productNameTextField.getText();
-        int productStock = Integer.parseInt(productStockTextField.getText());
-        double productPrice = Double.parseDouble(productPriceTextField.getText());
-        int productMin = Integer.parseInt(productMinTextField.getText());
-        int productMax = Integer.parseInt(productMaxTextField.getText());
+        String productStock = productStockTextField.getText();
+        String productPrice = productPriceTextField.getText();
+        String productMin = productMinTextField.getText();
+        String productMax = productMaxTextField.getText();
+        String errorMessage = "Product input is invalid. Please fix the following errors: \n";
 
-        Product updatedProduct = Inventory.lookupProduct(productID);
-        assert updatedProduct != null;
-        updatedProduct.setProductName(productName);
-        updatedProduct.setProductStock(productStock);
-        updatedProduct.setProductPrice(productPrice);
-        updatedProduct.setProductMin(productMin);
-        updatedProduct.setProductMax(productMax);
-        updatedProduct.getAllAssociatedParts().clear();
-        updatedProduct.getAllAssociatedParts().addAll(copyAssociatedParts);
-        Inventory.updateProduct(productIndex, updatedProduct);
+        List<String> productErrors = Product.productValidationCheck(productName, productPrice, productStock, productMin, productMax);
+
+        for (String error : productErrors) {
+            errorMessage = errorMessage + error + "\n";
+        }
+
+        if (productErrors.size() > 0) {
+            Alert productErrorAlert = new Alert(Alert.AlertType.ERROR);
+            productErrorAlert.setTitle("");
+            productErrorAlert.setHeaderText("Product Validation Error");
+            productErrorAlert.setContentText(errorMessage);
+            productErrorAlert.showAndWait();
+            return;
+        }
+        else {
+            double productPriceParsed = Double.parseDouble(productPrice);
+            int productStockParsed = Integer.parseInt(productStock);
+            int productMinParsed = Integer.parseInt(productMin);
+            int productMaxParsed = Integer.parseInt(productMax);
+
+            Product updatedProduct = Inventory.lookupProduct(productID);
+            assert updatedProduct != null;
+            updatedProduct.setProductName(productName);
+            updatedProduct.setProductStock(productStockParsed);
+            updatedProduct.setProductPrice(productPriceParsed);
+            updatedProduct.setProductMin(productMinParsed);
+            updatedProduct.setProductMax(productMaxParsed);
+            updatedProduct.getAllAssociatedParts().clear();
+            updatedProduct.getAllAssociatedParts().addAll(copyAssociatedParts);
+            Inventory.updateProduct(productIndex, updatedProduct);
+        }
 
 
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));

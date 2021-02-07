@@ -3,18 +3,14 @@ package View_Controller;
 import Model.InHouse;
 import Model.Inventory;
 import Model.Outsourced;
+import Model.Part;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -85,24 +81,52 @@ public class AddPartFormController {
     @FXML
     void addPartBtn(ActionEvent event) throws IOException {
 
-        int partID = partCount++;
+        int partID = partCount;
         String partName = partNameTextField.getText();
-        int partStock = Integer.parseInt(partStockTextField.getText());
-        double partPrice = Double.parseDouble(partPriceTextField.getText());
-        int partMax = Integer.parseInt(partMaxTextField.getText());
-        int partMin = Integer.parseInt(partMinTextField.getText());
-        int machineID;
-        String companyName;
+        String partStock = partStockTextField.getText();
+        String partPrice = partPriceTextField.getText();
+        String partMax = partMaxTextField.getText();
+        String partMin = partMinTextField.getText();
+        String mIDcompanyName = mIDcompanyNameTextField.getText();
+        int machineID = 0;
+        String errorMessage = "Part input is invalid. Please fix the following errors: \n";
 
+        List<String> partErrors = Part.partValidationCheck(partName, partPrice, partStock, partMin, partMax, mIDcompanyName);
 
-
-        if (inHouseSelection.isSelected()) {
-            machineID = Integer.parseInt(mIDcompanyNameTextField.getText());
-            Inventory.addPart(new InHouse(partID, partName, partPrice, partStock, partMin, partMax, machineID));
+        if (inHouseSelection.isSelected() && !mIDcompanyName.isEmpty()) {
+            try {
+                machineID = Integer.parseInt(mIDcompanyName);
+            }
+            catch (NumberFormatException e) {
+                partErrors.add("The Machine ID entered is invalid.");
+            }
         }
-        else if (outSourcedSelection.isSelected()) {
-            companyName = mIDcompanyNameTextField.getText();
-            Inventory.addPart(new Outsourced(partID, partName, partPrice, partStock, partMin, partMax, companyName));
+
+        for (String error : partErrors) {
+            errorMessage = errorMessage + error + "\n";
+        }
+
+        if (partErrors.size() > 0) {
+            Alert partErrorAlert = new Alert(Alert.AlertType.ERROR);
+            partErrorAlert.setTitle("");
+            partErrorAlert.setHeaderText("Part Validation Error");
+            partErrorAlert.setContentText(errorMessage);
+            partErrorAlert.showAndWait();
+            return;
+        }
+        else {
+            double partPriceParsed = Double.parseDouble(partPrice);
+            int partStockParsed = Integer.parseInt(partStock);
+            int partMinParsed = Integer.parseInt(partMin);
+            int partMaxParsed = Integer.parseInt(partMax);
+
+            if (inHouseSelection.isSelected()) {
+                Inventory.addPart(new InHouse(partID, partName, partPriceParsed, partStockParsed, partMinParsed, partMaxParsed, machineID));
+            } else if (outSourcedSelection.isSelected()) {
+                String companyName = mIDcompanyNameTextField.getText();
+                Inventory.addPart(new Outsourced(partID, partName, partPriceParsed, partStockParsed, partMinParsed, partMaxParsed, companyName));
+            }
+            partCount++;
         }
 
 

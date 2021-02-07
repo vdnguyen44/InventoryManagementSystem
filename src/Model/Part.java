@@ -69,7 +69,7 @@ public abstract class Part {
         this.partMax = partMax;
     }
 
-    public static List<String> partValidation(String partName, String partPrice, String partStock, String partMin, String partMax, String mIDcompanyName) {
+    public static List<String> partValidationCheck(String partName, String partPrice, String partStock, String partMin, String partMax, String mIDcompanyName) {
         List<String> errorList = new ArrayList<String>();
 
         if (partName.isEmpty()) {
@@ -128,35 +128,46 @@ public abstract class Part {
             errorList.add("The MachineID/Company Name field cannot be empty.");
         }
 
-
         try {
             int min = Integer.parseInt(partMin);
             int max = Integer.parseInt(partMax);
             int stock = Integer.parseInt(partStock);
 
-            if (!(stock >= min && stock <= max)) {
+            if (max < min) {
+                errorList.add("The maximum must be greater than the minimum.");
+            }
+            else if (max > min && !(stock >= min && stock <= max)) {
                 errorList.add("The amount of inventory must be between the minimum and maximum.");
             }
         }
         catch (NumberFormatException ignored) {
         }
 
-        try {
-            int min = Integer.parseInt(partMin);
-            int max = Integer.parseInt(partMax);
 
-            if (max < min) {
-                errorList.add("The maximum must be greater than the minimum.");
-            }
-        }
-        catch (NumberFormatException ignored) {
-
-        }
+//        try {
+//            int min = Integer.parseInt(partMin);
+//            int max = Integer.parseInt(partMax);
+//            int stock = Integer.parseInt(partStock);
+//
+//            if (!(stock >= min && stock <= max)) {
+//                errorList.add("The amount of inventory must be between the minimum and maximum.");
+//            }
+//        }
+//        catch (NumberFormatException ignored) {
+//        }
+//
+//        try {
+//            int min = Integer.parseInt(partMin);
+//            int max = Integer.parseInt(partMax);
+//
+//            if (max < min) {
+//                errorList.add("The maximum must be greater than the minimum.");
+//            }
+//        }
+//        catch (NumberFormatException ignored) {
+//        }
 
         return errorList;
-
-
-
     }
 }
 

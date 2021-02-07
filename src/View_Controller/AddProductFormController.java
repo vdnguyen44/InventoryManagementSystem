@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddProductFormController implements Initializable {
@@ -152,7 +153,17 @@ public class AddProductFormController implements Initializable {
             noneSelectedAlert.show();
         }
         else {
-            associatedParts.remove(selectedPart);
+            Alert removeAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            removeAlert.setTitle("Removal Confirmation");
+            removeAlert.setHeaderText("Are you sure you want to remove this part?");
+            Optional<ButtonType> result = removeAlert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                associatedParts.remove(selectedPart);
+            }
+
+
+
         }
     }
 

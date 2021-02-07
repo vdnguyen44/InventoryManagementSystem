@@ -18,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.Optional;
 
 
 public class ModifyProductFormController {
@@ -154,7 +155,15 @@ public class ModifyProductFormController {
             noneSelectedAlert.show();
         }
         else {
-            copyAssociatedParts.remove(selectedPart);
+            Alert removeAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            removeAlert.setTitle("Removal Confirmation");
+            removeAlert.setHeaderText("Are you sure you want to remove this part?");
+            Optional<ButtonType> result = removeAlert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                copyAssociatedParts.remove(selectedPart);
+            }
+
         }
     }
 

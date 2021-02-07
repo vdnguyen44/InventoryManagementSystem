@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainFormController implements Initializable {
@@ -137,8 +138,6 @@ public class MainFormController implements Initializable {
     @FXML
     void deletePartBtn(ActionEvent event) {
 
-            Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
-
 //          if (Inventory.getAllParts().contains(selectedPart)) {
 //              Inventory.deletePart(selectedPart);
 //          }
@@ -148,29 +147,43 @@ public class MainFormController implements Initializable {
 //                noneSelectedAlert.setHeaderText("No part is selected.");
 //                noneSelectedAlert.show();
 //          }
+        Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
+
+        if (partsTable.getSelectionModel().isEmpty()) {
+                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
+                noneSelectedAlert.setTitle("Part Selection Error");
+                noneSelectedAlert.setHeaderText("No part is selected.");
+                noneSelectedAlert.show();
+        }
+        else  {
+            Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            deleteAlert.setTitle("Deletion Confirmation");
+            deleteAlert.setHeaderText("Are you sure you want to delete this part?");
+            Optional<ButtonType> result = deleteAlert.showAndWait();
 
 
-//        if (partsTable.getSelectionModel().isEmpty()) {
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Inventory.deletePart(selectedPart);
+            }
+
+        }
+    }
+
+//        if (!Inventory.deletePart(selectedPart)) {
 //                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-//                noneSelectedAlert.setTitle("Part Selection Error");
-//                noneSelectedAlert.setHeaderText("No part is selected.");
+//                noneSelectedAlert.setTitle("Part Deletion Error");
+//                noneSelectedAlert.setHeaderText("No part was selected, nothing was deleted.");
 //                noneSelectedAlert.show();
 //        }
-//        else  {
+//        else {
+//            Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+//            deleteAlert.setTitle("Deletion Confirmation");
+//            deleteAlert.setHeaderText("Are you sure you want to delete this part?");
+//            deleteAlert.showAndWait();
 //            Inventory.deletePart(selectedPart);
 //        }
 
-        if (!Inventory.deletePart(selectedPart)) {
-                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-                noneSelectedAlert.setTitle("Part Deletion Error");
-                noneSelectedAlert.setHeaderText("No part was selected, nothing was deleted.");
-                noneSelectedAlert.show();
-        }
-        else {
-            Inventory.deletePart(selectedPart);
-        }
 
-    }
 
     @FXML
     void searchPartsTableBtn(ActionEvent event) {
@@ -241,18 +254,37 @@ public class MainFormController implements Initializable {
 
     @FXML
     void deleteProductBtn(ActionEvent event) {
-            Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
-        if (!Inventory.deleteProduct(selectedProduct)) {
+        Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
+
+        if (productsTable.getSelectionModel().isEmpty()) {
             Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-            noneSelectedAlert.setTitle("Product Deletion Error");
-            noneSelectedAlert.setHeaderText("No product is selected, nothing was deleted.");
+            noneSelectedAlert.setTitle("Product Selection Error");
+            noneSelectedAlert.setHeaderText("No product is selected.");
             noneSelectedAlert.show();
         }
-        else {
-            Inventory.deleteProduct(selectedProduct);
-        }
+        else  {
+            Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            deleteAlert.setTitle("Deletion Confirmation");
+            deleteAlert.setHeaderText("Are you sure you want to delete this product?");
+            Optional<ButtonType> result = deleteAlert.showAndWait();
 
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                if (selectedProduct.getAllAssociatedParts().isEmpty()) {
+                    Inventory.deleteProduct(selectedProduct);
+                }
+                else {
+                    Alert nonemptyProductAlert = new Alert(Alert.AlertType.ERROR);
+                    nonemptyProductAlert.setTitle("Nonempty Product");
+                    nonemptyProductAlert.setHeaderText("Products associated with a part cannot be deleted. Please remove the part and try again.");
+                    nonemptyProductAlert.show();
+                }
+            }
+
+
+        }
     }
+
 
     @FXML
     void searchProductsTable(ActionEvent event) {
@@ -344,6 +376,18 @@ public class MainFormController implements Initializable {
             }
         }
     }
+
+//    Optional<ButtonType> deleteConfirmation(String item) {
+//        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+//        deleteAlert.setTitle("Deletion Confirmation");
+//        deleteAlert.setHeaderText("Are you sure you want to delete this " + item + "?");
+//        return deleteAlert.showAndWait();
+//
+//        // return result.isPresent() && result.get() == ButtonType.OK;
+//
+//        // return deleteAlert.showAndWait();
+//        // if (result.isPresent() && result.get() == ButtonType.OK)
+//    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

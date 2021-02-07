@@ -18,6 +18,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddPartFormController {
@@ -92,6 +94,8 @@ public class AddPartFormController {
         int machineID;
         String companyName;
 
+
+
         if (inHouseSelection.isSelected()) {
             machineID = Integer.parseInt(mIDcompanyNameTextField.getText());
             Inventory.addPart(new InHouse(partID, partName, partPrice, partStock, partMin, partMax, machineID));
@@ -121,5 +125,7 @@ public class AddPartFormController {
         window.setScene(mainScene);
         window.show();
     }
+
+
 
 }

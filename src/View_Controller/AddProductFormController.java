@@ -24,87 +24,134 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * @author Vincent Nguyen
+ * Controller for AddProductForm
+ */
 public class AddProductFormController implements Initializable {
 
-    @FXML
-    private TitledPane addProductForm;
 
-    @FXML
-    private TextField productIDTextField;
-
+    /**
+     * The text field to enter a product's name.
+     */
     @FXML
     private TextField productNameTextField;
 
+    /**
+     * The text field to enter a product's inventory level.
+     */
     @FXML
     private TextField productStockTextField;
 
+    /**
+     * The text field to enter a  product's price.
+     */
     @FXML
     private TextField productPriceTextField;
 
+    /**
+     * The text field to enter a product's maximum inventory.
+     */
     @FXML
     private TextField productMaxTextField;
 
+    /**
+     * The text field to enter a product's minimum inventory.
+     */
     @FXML
     private TextField productMinTextField;
 
+    /**
+     * The table view of all available parts in inventory.
+     */
     @FXML
     private TableView<Part> availablePartsTable;
 
+    /**
+     * The column in the available parts table that represents a part's ID.
+     */
     @FXML
     private TableColumn<Part, Integer> availablePartIDCol;
 
+    /**
+     * The column in the available parts table that represents a part's name.
+     */
     @FXML
     private TableColumn<Part, String> availablePartNameCol;
 
+    /**
+     * The column in the available parts table that represents a part's inventory level.
+     */
     @FXML
     private TableColumn<Part, Integer> availablePartStockCol;
 
+    /**
+     * The column in the available parts table that represents a part's price.
+     */
     @FXML
     private TableColumn<Part, Double> availablePartPriceCol;
 
+    /**
+     * The text field used to search for a part.
+     */
     @FXML
     private TextField searchPartTextField;
 
-    @FXML
-    private Button searchPartButton;
-
-    @FXML
-    private Button addPartButton;
-
+    /**
+     * The table view of parts to be associated with a product.
+     */
     @FXML
     private TableView<Part> associatedPartsTable;
 
+    /**
+     * The column in the associated parts table that represents a part's ID.
+     */
     @FXML
     private TableColumn<Part, Integer> associatedPartIDCol;
 
+    /**
+     * The column in the associated parts table that represents a part's name.
+     */
     @FXML
     private TableColumn<Part, String> associatedPartNameCol;
 
+    /**
+     *The column in the associated parts table that represents a part's inventory level.
+     */
     @FXML
     private TableColumn<Part, Integer> associatedPartStockCol;
 
+    /**
+     *The column in the associated parts table that represents a part's price.
+     */
     @FXML
     private TableColumn<Part, Double> associatedPartPriceCol;
 
-    @FXML
-    private Button removeAssociatedPartButton;
-
-    @FXML
-    private Button saveButton;
-
-    @FXML
-    private Button cancelButton;
-
+    /**
+     * <p>This variable keeps track of how many products have been created, but increments each time a product is created so
+     * no product will have the same ID.</p>
+     */
     private static int productCount = 1;
 
+    /**
+     * An observable list of parts to be associated with a product as they are added and removed.
+     */
     private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
 
+    /**
+     * This method searches the available parts table by ID or name after the search button is pressed.
+     * @param event When the search button is pressed.
+     */
     @FXML
     void searchAvailablePartsBtn(ActionEvent event) {
         searchAvailablePartsTable();
     }
 
+    /**
+     * This method searches the available parts table by ID or name after the enter key is pressed.
+     * @param event When the enter key is pressed.
+     */
     @FXML
     void searchAvailablePartsTableEnter(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER)  {
@@ -112,6 +159,11 @@ public class AddProductFormController implements Initializable {
         }
     }
 
+    /**
+     * This method adds the selected part from the available parts table to the associated parts table. Error dialogs
+     * are generated if no part is selected or if the part is already associated with the product.
+     * @param event When the add button is pressed.
+     */
     @FXML
     void addPartToAssociatedParts(ActionEvent event) {
 
@@ -135,6 +187,11 @@ public class AddProductFormController implements Initializable {
             availablePartsTable.getSelectionModel().clearSelection();
     }
 
+    /**
+     * This method removes the selected part from the associated parts table. An error dialog is generated if no part is
+     * selected, and a confirmation dialog to confirm the removal of the part.
+     * @param event When the remove button is pressed.
+     */
     @FXML
     void removeAssociatedPartBtn(ActionEvent event) {
 
@@ -162,12 +219,17 @@ public class AddProductFormController implements Initializable {
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 associatedParts.remove(selectedPart);
             }
-
-
-
         }
     }
 
+    /**
+     * <p>This method attempts to create the product by extracting values from the text fields and checking whether the product is
+     * valid. If the error list is not empty, the user is prompted with an error dialog with all errors to fix. If all values
+     * are valid, the appropriate values are parsed and the product object is instantiated with those values. The parts from the
+     * associated parts table are then added to the newly created product's associated parts list. The product count is then incremented.</p>
+     * @param event When the save button is pressed.
+     * @throws IOException Exception thrown if the main form fxml cannot be located.
+     */
     @FXML
     void addProductBtn(ActionEvent event) throws IOException {
 
@@ -179,6 +241,7 @@ public class AddProductFormController implements Initializable {
         String productMax = productMaxTextField.getText();
         String errorMessage = "Product input is invalid. Please fix the following errors: \n";
 
+        // Check for product errors
         List<String> productErrors = Product.productValidationCheck(productName, productPrice, productStock, productMin, productMax);
 
         for (String error : productErrors) {
@@ -194,6 +257,7 @@ public class AddProductFormController implements Initializable {
             return;
         }
         else {
+            // Create the product with parsed values/associated parts list and add it to inventory
             double productPriceParsed = Double.parseDouble(productPrice);
             int productStockParsed = Integer.parseInt(productStock);
             int productMinParsed = Integer.parseInt(productMin);
@@ -207,7 +271,7 @@ public class AddProductFormController implements Initializable {
             Inventory.addProduct(newProduct);
             productCount++;
         }
-
+        // Return to main form
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         Scene mainScene = new Scene(mainLoader);
 
@@ -216,13 +280,14 @@ public class AddProductFormController implements Initializable {
         window.show();
     }
 
+    /**
+     * This method changes the scene back to the main form.
+     * @param event When the cancel button is pressed.
+     * @throws IOException Exception thrown if main form fxml cannot be located.
+     */
     @FXML
     void addProductCancelBtn(ActionEvent event) throws IOException {
 
-//        ObservableList<Part> associatedParts = Product.getAllAssociatedParts();
-//        associatedParts.clear();
-        // associatedParts.removeAll();
-
         Parent mainLoader = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         Scene mainScene = new Scene(mainLoader);
 
@@ -231,6 +296,13 @@ public class AddProductFormController implements Initializable {
         window.show();
     }
 
+    /**
+     * <p>This method searches the available parts table by ID or name. It first searches by ID by attempting to parse the search query
+     * into an integer. If a part's ID matches the parsed search query, it is added to the search result list and the available
+     * parts table displays that list. If parsing the integer doesn't work, it attempts to search by string (partial/complete name).
+     * Any partial/complete matches are added to a search result list and the table view displays those items. If the search query is empty
+     * and the search button/enter is pressed, the available parts table is repopulated with all parts in inventory.</p>
+     */
     void searchAvailablePartsTable() {
         String searchQuery = searchPartTextField.getText();
         ObservableList<Part> searchResult = FXCollections.observableArrayList();
@@ -266,17 +338,25 @@ public class AddProductFormController implements Initializable {
         }
     }
 
+    /**
+     * <p>This method initializes the controller with the available parts/associated parts table view and formats their cells.
+     * The associated parts table is empty when initialized.</p>
+     * @param url Location
+     * @param rb Resources
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        // Initialize available parts table
         availablePartsTable.setItems(Inventory.getAllParts());
+        // Set value of the cells
         availablePartIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
         availablePartNameCol.setCellValueFactory(new PropertyValueFactory<>("partName"));
         availablePartStockCol.setCellValueFactory(new PropertyValueFactory<>("partStock"));
         availablePartPriceCol.setCellValueFactory(new PropertyValueFactory<>("partPrice"));
 
+        // Formats the cells to display prices accurately
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-
         availablePartPriceCol.setCellFactory(price -> new TableCell<Part, Double>() {
 
             protected void updateItem(Double price, boolean empty) {
@@ -290,14 +370,15 @@ public class AddProductFormController implements Initializable {
             }
         });
 
-        availablePartsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
+        // Initialize associated parts table
         associatedPartsTable.setItems(associatedParts);
+        // Set value of the cells
         associatedPartIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
         associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<>("partName"));
         associatedPartStockCol.setCellValueFactory(new PropertyValueFactory<>("partStock"));
         associatedPartPriceCol.setCellValueFactory(new PropertyValueFactory<>("partPrice"));
 
+        // Formats the cells to display prices accurately
         associatedPartPriceCol.setCellFactory(price -> new TableCell<Part, Double>() {
 
             protected void updateItem(Double price, boolean empty) {

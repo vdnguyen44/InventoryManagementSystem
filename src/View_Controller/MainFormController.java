@@ -22,77 +22,96 @@ import java.text.NumberFormat;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * @author Vincent Nguyen
+ * Controller for the main form.
+ */
 public class MainFormController implements Initializable {
 
-    @FXML
-    private TitledPane mainForm;
-
+    /**
+     * The table view that displays all parts in inventory.
+     */
     @FXML
     private TableView<Part> partsTable;
 
+    /**
+     * The column in the parts table that represents the part's ID.
+     */
     @FXML
     private TableColumn<Part, Integer> partIDCol;
 
+    /**
+     * The column in the parts table that represents the part's name.
+     */
     @FXML
     private TableColumn<Part, String> partNameCol;
 
+    /**
+     * The column in the parts table that represents the part's inventory level.
+     */
     @FXML
     private TableColumn<Part, Integer> partStockCol;
 
+    /**
+     * The column in the parts table that represents the part's price.
+     */
     @FXML
     private TableColumn<Part, Double> partPriceCol;
 
-
-    @FXML
-    private Button addPartButton;
-
-    @FXML
-    private Button modifyPartButton;
-
-    @FXML
-    private Button deletePartButton;
-
+    /**
+     * The text field used to search for a part.
+     */
     @FXML
     private TextField searchPartTextField;
 
-    @FXML
-    private Button searchPartButton;
-
+    /**
+     * The table view that displays all products in inventory.
+     */
     @FXML
     private TableView<Product> productsTable;
 
+    /**
+     * The column in the products table that represents the product's ID.
+     */
     @FXML
     private TableColumn<Product, Integer> productIDCol;
 
+    /**
+     * The column in the products table that represents the product's name.
+     */
     @FXML
     private TableColumn<Product, String> productNameCol;
 
+    /**
+     * The column in the products table that represents the product's inventory level.
+     */
     @FXML
     private TableColumn<Product, Integer> productStockCol;
 
+    /**
+     * The column in the products table that represents the product's price.
+     */
     @FXML
     private TableColumn<Product, Double> productPriceCol;
 
-
-    @FXML
-    private Button addProductButton;
-
-    @FXML
-    private Button modifyProductButton;
-
-    @FXML
-    private Button deleteProductButton;
-
+    /**
+     * The text field used to search for a product.
+     */
     @FXML
     private TextField searchProductTextField;
 
-    @FXML
-    private Button searchProductButton;
-
+    /**
+     * The button that closes the application.
+     */
     @FXML
     private Button exitButton;
 
-
+    /**
+     *<p>This method changes the scene and displays the Add Part Form.</p>
+     *<p>RUNTIME ERROR - Controller class had to be specified in fxml file in order to connect view and controller.</p>
+     * @param event When the add button is pressed.
+     * @throws IOException Exception thrown if the AddPartForm fxml cannot be located.
+     */
     @FXML
     void displayAddPartBtn(ActionEvent event) throws IOException {
         Parent addPartFormLoader = FXMLLoader.load(getClass().getResource("AddPartForm.fxml"));
@@ -103,25 +122,30 @@ public class MainFormController implements Initializable {
         window.show();
     }
 
+    /**
+     * <p>This method changes the scene and displays the Modify Part Form. The view and it's controller are obtained. Then
+     * the selected part's data is sent to the form to initialize it's fields. An error dialog is provided if no part
+     * is selected from the parts table view.</p>
+     * @param event When the modify button is pressed.
+     * @throws IOException Exception thrown if the ModifyPartForm fxml cannot be located.
+     */
     @FXML
     void displayModifyPartBtn(ActionEvent event) throws IOException {
         try
         {
-            // created fxmlloader object and let it know which view to use
+            // Obtain View
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("ModifyPartForm.fxml"));
             Parent partsTableParent = loader.load();
-
             Scene modifyPartScene = new Scene(partsTableParent);
 
-            // letting object know which controller to use
+            // Obtain respective controller
+            // sending to modifyPartBtn didn't work because that method requires output of event but part is provided
             ModifyPartFormController ModPartController = loader.getController();
             ModPartController.initializePartData(partsTable.getSelectionModel().getSelectedItem());
-            // sending to modifyPartBtn didn't work because that method requires output of event but part is provided
 
-
+            // Display the modify part form
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
             window.setScene(modifyPartScene);
             window.show();
         }
@@ -133,21 +157,20 @@ public class MainFormController implements Initializable {
             noneSelectedAlert.setContentText("No part is selected.");
             noneSelectedAlert.show();
         }
-
     }
 
+    /**
+     * <p>This method deletes the selected part from the parts table. It checks for whether a part is selected and gives
+     * an error dialog if no part is selected. If a part is selected, the user is asked to confirm whether they would
+     * like to proceed and delete the part. Only if the user presses OK, is the part deleted.</p>
+     * <p>RUNTIME ERROR - Initially had an if statement that checked the value of deletePart. It ended up being too
+     * ambiguous and when setting up confirmation dialog to delete part, the part would be deleted regardless of whether
+     * the user presses OK or cancel. Fixed the issue by having more clear cases in the if statements.</p>
+     * @param event When the delete button is pressed.
+     */
     @FXML
     void deletePartBtn(ActionEvent event) {
 
-//          if (Inventory.getAllParts().contains(selectedPart)) {
-//              Inventory.deletePart(selectedPart);
-//          }
-//          else {
-//              Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-//                noneSelectedAlert.setTitle("Part Selection Error");
-//                noneSelectedAlert.setHeaderText("No part is selected.");
-//                noneSelectedAlert.show();
-//          }
         Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
 
         if (partsTable.getSelectionModel().isEmpty()) {
@@ -164,45 +187,25 @@ public class MainFormController implements Initializable {
             deleteAlert.setContentText("Are you sure you want to delete this part?");
             Optional<ButtonType> result = deleteAlert.showAndWait();
 
-
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 Inventory.deletePart(selectedPart);
             }
-
         }
     }
 
-//        if (!Inventory.deletePart(selectedPart)) {
-//                Alert noneSelectedAlert = new Alert(Alert.AlertType.ERROR);
-//                noneSelectedAlert.setTitle("Part Deletion Error");
-//                noneSelectedAlert.setHeaderText("No part was selected, nothing was deleted.");
-//                noneSelectedAlert.show();
-//        }
-//        else {
-//            Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
-//            deleteAlert.setTitle("Deletion Confirmation");
-//            deleteAlert.setHeaderText("Are you sure you want to delete this part?");
-//            deleteAlert.showAndWait();
-//            Inventory.deletePart(selectedPart);
-//        }
-
-
-
+    /**
+     * This method searches the part table by ID or name after the search button is pressed.
+     * @param event When search button is pressed.
+     */
     @FXML
     void searchPartsTableBtn(ActionEvent event) {
-        // Part = type of class being scanned in list, part = element variable, after the colons is the list, getAllParts returns that list
-//        for (Part part : Inventory.getAllParts()) {
-//
-//        }
-//        // too specific, come up with method to check for whether partID or partName is being searched, 36:49
-//        int searchQuery = Integer.parseInt(searchPartTextField.getText());
-//        ObservableList<Part> searchResult = FXCollections.observableArrayList();
-//        searchResult.add(Inventory.lookUpPartByID(searchQuery));
-//        partsTable.setItems(searchResult);
-
         searchPartsTable();
     }
 
+    /**
+     * This method searches the part table by ID or name after the enter key is pressed.
+     * @param event When the enter key is pressed.
+     */
     @FXML
     void searchPartsTableEnter (KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER)  {
@@ -210,6 +213,11 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * This method changes the scene and displays the add product form.
+     * @param event When the add button is pressed.
+     * @throws IOException Exception thrown if the AddProductForm fxml cannot be located.
+     */
     @FXML
     void displayAddProductBtn(ActionEvent event) throws IOException {
 
@@ -222,26 +230,30 @@ public class MainFormController implements Initializable {
 
     }
 
+    /**
+     * <p>This method changes the scene and displays the Modify Product Form. The view and it's controller are obtained.
+     * Then the selected product's data is sent to the form to initialize it's fields. An error dialog is provided if no product
+     * is selected from the products table view.</p>
+     * @param event When the modify button is pressed.
+     * @throws IOException Exception thrown if the ModifyProductForm fxml cannot be located.
+     */
     @FXML
     void displayModifyProductBtn(ActionEvent event) throws IOException {
 
         try
         {
-            // created fxmlloader object and let it know which view to use
+            // Obtain the view
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("ModifyProductForm.fxml"));
             Parent productsTableParent = loader.load();
-
             Scene modifyProductScene = new Scene(productsTableParent);
 
-            // letting object know which controller to use
+            // Obtain respective controller
             ModifyProductFormController ModProductController = loader.getController();
             ModProductController.initializeProductData(productsTable.getSelectionModel().getSelectedItem());
-            // sending to modifyPartBtn didn't work because that method requires output of event but part is provided
 
-
+            // Display the modify product form
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
             window.setScene(modifyProductScene);
             window.show();
         }
@@ -256,6 +268,14 @@ public class MainFormController implements Initializable {
 
     }
 
+    /**
+     * <p>This method deletes a product from the products table. It checks for whether a product is selected and gives
+     * an error dialog if no product is selected. If a product is selected, the user is asked to confirm whether they would
+     * like to proceed and delete the product. If the user presses OK, one more check is executed to see whether the product
+     * has any parts associated with it. If it has parts associated with it, an error dialog pops up and asks the user to remove
+     * the part/s before trying again. Else, a product without any associated parts is deleted.</p>
+     * @param event When the delete button is pressed.
+     */
     @FXML
     void deleteProductBtn(ActionEvent event) {
         Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
@@ -287,17 +307,23 @@ public class MainFormController implements Initializable {
                     nonemptyProductAlert.show();
                 }
             }
-
-
         }
     }
 
 
+    /**
+     * This method searches the product table by ID or name after the search button is pressed.
+     * @param event When the search button is pressed.
+     */
     @FXML
     void searchProductsTable(ActionEvent event) {
         searchProductsTable();
     }
 
+    /**
+     * This method searches the product table by ID or name after the enter key is pressed.
+     * @param event When the enter key is pressed.
+     */
     @FXML
     void searchProductsTableEnter(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -305,13 +331,25 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * This method closes the application.
+     * @param event When the exit button is pressed.
+     */
     @FXML
     void exitBtn(ActionEvent event) {
         Stage stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
-
     }
 
+    /**
+     * <p>This method searches the parts table by ID or name. It first searches by ID by attempting to parse the search query
+     * into an integer. If a part's ID matches the parsed search query, it is added to the search result list and the
+     * parts table displays that list. If parsing the integer doesn't work, it attempts to search by string (partial/complete name).
+     * Any partial/complete matches are added to a search result list and the table view displays those items. If the search query is empty
+     * and the search button/enter is pressed, the parts table is repopulated with all parts in inventory.</p>
+     * <p>FUTURE ENHANCEMENT - Ability to filter search results dynamically as the user types out search query, search
+     * suggestions, search history</p>
+     */
     void searchPartsTable() {
         String searchQuery = searchPartTextField.getText();
         ObservableList<Part> searchResult = FXCollections.observableArrayList();
@@ -330,7 +368,6 @@ public class MainFormController implements Initializable {
                 searchResult.add(Inventory.lookupPart(queryInt));
                 partsTable.setItems(searchResult);
             }
-
         }
         catch (NumberFormatException e) {
             partsTable.setItems(Inventory.lookupPart(searchQuery));
@@ -350,6 +387,15 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * <p>This method searches the products table by ID or name. It first searches by ID by attempting to parse the search query
+     * into an integer. If a product's ID matches the parsed search query, it is added to the search result list and the
+     * products table displays that list. If parsing the integer doesn't work, it attempts to search by string (partial/complete name).
+     * Any partial/complete matches are added to a search result list and the table view displays those items. If the search query is empty
+     * and the search button/enter is pressed, the parts table is repopulated with all parts in inventory.</p>
+     * <p>FUTURE ENHANCEMENT - Ability to filter search results dynamically as the user types out search query, search
+     * suggestions, search history.</p>
+     */
     void searchProductsTable() {
         String searchQuery = searchProductTextField.getText();
         ObservableList<Product> searchResult = FXCollections.observableArrayList();
@@ -368,7 +414,6 @@ public class MainFormController implements Initializable {
                 searchResult.add(Inventory.lookupProduct(queryInt));
                 productsTable.setItems(searchResult);
             }
-
         }
         catch (NumberFormatException e) {
             productsTable.setItems(Inventory.lookupProduct(searchQuery));
@@ -388,73 +433,49 @@ public class MainFormController implements Initializable {
         }
     }
 
-//    Optional<ButtonType> deleteConfirmation(String item) {
-//        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
-//        deleteAlert.setTitle("Deletion Confirmation");
-//        deleteAlert.setHeaderText("Are you sure you want to delete this " + item + "?");
-//        return deleteAlert.showAndWait();
-//
-//        // return result.isPresent() && result.get() == ButtonType.OK;
-//
-//        // return deleteAlert.showAndWait();
-//        // if (result.isPresent() && result.get() == ButtonType.OK)
-//    }
-
+    /**
+     * <p>This method initializes the controller with the parts/products table view and formats their cells.</p>
+     * <p>RUNTIME ERROR - At first, the tables weren't showing anything without initializing the controller. Had to
+     * add an "implements Initializable at beginning of class for this method to work. Prices would display but without
+     * trailing zeroes if applicable. Used setCellFactory to format the prices as intended.</p>
+     * @param url Location
+     * @param rb Resources
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //this is the first method called anytime this controller is instantiated
-        //at first program wouldn't run because "implements Initializable" wasn't specified at beginning of class
-        // this code initializes the table and displays all available parts when main screen is loaded
-
-
+        // Initialize Parts Table
         partsTable.setItems(Inventory.getAllParts());
 
+        // Set value of the cells
         partIDCol.setCellValueFactory(new PropertyValueFactory<>("partID"));
-
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("partName"));
-
         partStockCol.setCellValueFactory(new PropertyValueFactory<>("partStock"));
-
         partPriceCol.setCellValueFactory(new PropertyValueFactory<>("partPrice"));
 
-        // add input to only allow two decimal places
+        // Formats the cells to display prices accurately
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-
             partPriceCol.setCellFactory(price -> new TableCell<Part, Double>() {
-
-
                 protected void updateItem(Double price, boolean empty) {
-
                     super.updateItem(price, empty);
                     if (empty) {
                         setText(null);
-
                     } else {
                         setText(currencyFormatter.format(price));
                     }
-
                     }
-
-
             });
 
-
-
-        partsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        // initializes the products table
+        // Initialize Products Table
         productsTable.setItems(Inventory.getAllProducts());
 
+        // Set values of the cells
         productIDCol.setCellValueFactory(new PropertyValueFactory<>("productID"));
-
         productNameCol.setCellValueFactory(new PropertyValueFactory<>("productName"));
-
         productStockCol.setCellValueFactory(new PropertyValueFactory<>("productStock"));
-
         productPriceCol.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
 
+        // Formats the cells to display prices accurately
         productPriceCol.setCellFactory(price -> new TableCell<Product, Double>() {
-
             protected void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
                 if (empty) {
@@ -465,8 +486,5 @@ public class MainFormController implements Initializable {
                 }
             }
         });
-
-
     }
-
 }
